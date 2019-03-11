@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+  
+  <head>
+    <meta charset="UTF-8">
+    <title>欢迎页面-X-admin2.0</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="../../../css/font.css">
+    <link rel="stylesheet" href="../../../css/xadmin.css">
+    <link rel="stylesheet" href="../../../css/common.css">
+    <script type="text/javascript" src="../../../js/jquery.min.js"></script>
+    <script type="text/javascript" src="../../../lib/layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="../../../js/xadmin.js"></script>
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+      <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <script src="../../../js/common.js"></script>
+    <script src="../../../js/ajax.js"></script>
+    <script src="../../../js/tool.js"></script>
+    <style>
+      .x-body>.layui-row>form input{
+        width:108px
+      }
+      .layui-table th,
+     td{
+          text-align: center;
+      }
+    </style>
+  </head>
+  
+  <body>
+    <div class="x-nav">
+      <span class="layui-breadcrumb">
+        <a href="">首页</a>
+        <a href="">任务管理</a>
+        <a>
+          <cite>任务列表</cite></a>
+      </span>
+      <a class="layui-btn layui-btn-sm" style="line-height:1.6em;margin-top:3px;float:right" href="javascript:location.replace(location.href);" title="刷新">
+        <i class="layui-icon" style="line-height:26px;">ဂ</i></a>
+    </div>
+    <div class="x-body">
+      <div class="layui-row">
+        <form class="layui-form layui-col-md12 x-so">
+          创建时间：<input class="layui-input begin" placeholder="开始时间" name="begin" id="start" style="width:130px">——
+          <input class="layui-input end" placeholder="结束时间" name="end" id="end" style="width:130px">
+          任务名：<input type="text" name="title"  placeholder="任务名" autocomplete="off" class="layui-input">
+          奖励类型： <div class="layui-input-inline">
+          <select name="type" >
+            <option value="">请选择</option>
+            <option value="1">积分</option>
+            <option value="2">现金</option>
+          </select>
+          </div>
+          <button id="search" class="layui-btn"><i class="layui-icon">&#xe615;</i></button>
+        </form>
+      </div>
+      <xblock>
+        <!--<button class="layui-btn layui-btn-danger" onclick="delAll()"><i class="layui-icon"></i>批量删除</button>-->
+        <button class="layui-btn" onclick="x_admin_show('新增任务','add.html',500,670)"><i class="layui-icon"></i>新增任务</button>
+      </xblock>
+      <table class="layui-table" lay-size="sm">
+        <thead>
+          <tr>
+            <th>任务ID</th>
+            <th>任务名</th>
+            <th>状态</th>
+            <th>奖励类型</th>
+            <th>奖励值</th>
+            <th>图片</th>
+            <th>开始时间</th>
+            <th>结束时间</th>
+            <th>详情</th>
+            <th>添加人id</th>
+            <th>添加时间</th>
+            <th>操作</th>
+        </thead>
+          <tbody id="tbody"></tbody>
+      </table>
+      <div id="page"></div>
+
+    </div>
+    <script>
+      layui.use(['laypage', 'layer','laydate','form'], function() {
+        var laydate = layui.laydate;
+        var layer = layui.layer
+                , form = layui.form;
+        //执行一个laydate实例
+        laydate.render({
+          elem: '#start' //指定元素
+          , type: 'datetime'
+
+        });
+        //执行一个laydate实例
+        laydate.render({
+          elem: '#end' //指定元素
+          , type: 'datetime'
+        });
+        var url = domain1 + '/activityTask/findActivityTaskList';
+
+        var element = function (item) {
+          return `
+                  <tr>
+                  <td >${item.id}</td>
+                  <td >${item.title}</td>
+                  <td >${item.status==0?'进行中':'停用'}</td>
+                  <td >${item.type==1?'积分':item.type==2?'现金':''}</td>
+                  <td >${item.number}</td>
+                  <td ><img src="${item.imgUrl==null?'':item.imgUrl}" alt=""/></td>
+                  <td >${getDate(item.startTime)}</td>
+                  <td >${getDate(item.endTime)}</td>
+                  <td >${item.detail}</td>
+                  <td >${item.optUid}</td>
+                   <td>${getDate(item.createTime)}</td>
+                   <td>
+                    <button class="layui-btn layui-btn-primary layui-btn-xs" onclick="x_admin_show('编辑分类','edit.html?id=${item.id}',500,670)">编辑</button>
+                    <button class="layui-btn layui-btn-danger layui-btn-xs" onclick="deleteSth(domain1+'/activityTask/deleteActivityTask?id=${item.id}')">删除</button>
+                   </td>
+                  </tr>
+            `
+        };
+        servePage(url, element);
+
+        $('#search').click(function(e){
+          e.preventDefault();
+          var title=$('[name=title]').val();
+          var type=$('[name=type]').val();
+          var startTime=$('.begin').val().replace(/\:/g,"%3A");
+          var endTime=$('.end').val().replace(/\:/g,"%3A");
+          var url2 = domain1 + '/activityTask/findActivityTaskList?title='+title+'&startTime='+startTime+'&endTime='+endTime+'&type='+type;
+          servePage2(url2, element);
+        });
+        form.render();
+      })
+    </script>
+  </body>
+
+</html>

@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.slljr.finance.admin.mapper.ForumTopicMapper">
+  <resultMap id="BaseResultMap" type="com.slljr.finance.common.pojo.model.ForumTopic">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="uid" jdbcType="INTEGER" property="uid" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="section_id" jdbcType="INTEGER" property="sectionId" />
+    <result column="reply_count" jdbcType="INTEGER" property="replyCount" />
+    <result column="like_count" jdbcType="INTEGER" property="likeCount" />
+    <result column="view_count" jdbcType="INTEGER" property="viewCount" />
+    <result column="top" jdbcType="INTEGER" property="top" />
+    <result column="last_reply" jdbcType="TIMESTAMP" property="lastReply" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="topic_url" jdbcType="VARCHAR" property="topicUrl" />  
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  
+    <resultMap id="VoResultMap" type="com.slljr.finance.common.pojo.vo.ForumTopicListVO" extends="BaseResultMap">
+   		 <result column="headImg" jdbcType="VARCHAR" property="headImg" />
+   		 <result column="nickName" jdbcType="VARCHAR" property="nickName" />
+   		 <result column="grade" jdbcType="INTEGER" property="grade" />  		 
+  	</resultMap>
+  	<resultMap id="VoUserResultMap" type="com.slljr.finance.common.pojo.vo.FroumUserTopicListVO" extends="BaseResultMap">
+   		 <result column="headImg" jdbcType="VARCHAR" property="headImg" />
+   		 <result column="nickName" jdbcType="VARCHAR" property="nickName" />
+   		 <result column="grade" jdbcType="INTEGER" property="grade" />
+   		 <result column="sex" jdbcType="INTEGER" property="sex" />
+   		 <result column="integral" jdbcType="INTEGER" property="integral" />
+  	</resultMap>
+  	
+  <sql id="Base_Column_List">
+    id, uid, title, section_id, topic_url, reply_count, view_count, like_count, top, last_reply, status, create_time, 
+    update_time
+  </sql>
+  <sql id="Blob_Column_List">
+    content
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from forum_topic
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from forum_topic
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.slljr.finance.common.pojo.model.ForumTopic">
+    insert into forum_topic (id, uid, title, 
+      section_id, reply_count, like_count, 
+      view_count, top, last_reply, 
+      status, create_time, update_time, topic_url,
+      content)
+    values (#{id,jdbcType=INTEGER}, #{uid,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, 
+      #{sectionId,jdbcType=INTEGER}, #{replyCount,jdbcType=INTEGER}, #{likeCount,jdbcType=INTEGER}, 
+      #{viewCount,jdbcType=INTEGER}, #{top,jdbcType=INTEGER}, #{lastReply,jdbcType=TIMESTAMP}, 
+      #{status,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{topicUrl,jdbcType=VARCHAR}, #{content,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.slljr.finance.common.pojo.model.ForumTopic">
+    insert into forum_topic
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="uid != null">
+        uid,
+      </if>
+      <if test="title != null">
+        title,
+      </if>
+      <if test="sectionId != null">
+        section_id,
+      </if>
+      <if test="replyCount != null">
+        reply_count,
+      </if>
+      <if test="likeCount != null">
+        like_count,
+      </if>
+      <if test="viewCount != null">
+        view_count,
+      </if>
+      <if test="top != null">
+        top,
+      </if>
+      <if test="lastReply != null">
+        last_reply,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+     <if test="topicUrl != null">
+        topic_url,
+      </if>
+      <if test="content != null">
+        content,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="uid != null">
+        #{uid,jdbcType=INTEGER},
+      </if>
+      <if test="title != null">
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="sectionId != null">
+        #{sectionId,jdbcType=INTEGER},
+      </if>
+      <if test="replyCount != null">
+        #{replyCount,jdbcType=INTEGER},
+      </if>
+      <if test="likeCount != null">
+        #{likeCount,jdbcType=INTEGER},
+      </if>
+      <if test="viewCount != null">
+        #{viewCount,jdbcType=INTEGER},
+      </if>
+      <if test="top != null">
+        #{top,jdbcType=INTEGER},
+      </if>
+      <if test="lastReply != null">
+        #{lastReply,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+       <if test="topicUrl != null">
+       #{topicUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null">
+        #{content,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.slljr.finance.common.pojo.model.ForumTopic">
+    update forum_topic
+    <set>
+      <if test="uid != null">
+        uid = #{uid,jdbcType=INTEGER},
+      </if>
+      <if test="title != null">
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="sectionId != null">
+        section_id = #{sectionId,jdbcType=INTEGER},
+      </if>
+      <if test="replyCount != null">
+        reply_count = #{replyCount,jdbcType=INTEGER},
+      </if>
+      <if test="likeCount != null">
+        like_count = #{likeCount,jdbcType=INTEGER},
+      </if>
+      <if test="viewCount != null">
+        view_count = #{viewCount,jdbcType=INTEGER},
+      </if>
+      <if test="top != null">
+        top = #{top,jdbcType=INTEGER},
+      </if>
+      <if test="lastReply != null">
+        last_reply = #{lastReply,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="topicUrl != null">
+        topic_url =  #{topicUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null">
+        content = #{content,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.slljr.finance.common.pojo.model.ForumTopic">
+    update forum_topic
+    set uid = #{uid,jdbcType=INTEGER},
+      title = #{title,jdbcType=VARCHAR},
+      section_id = #{sectionId,jdbcType=INTEGER},
+      reply_count = #{replyCount,jdbcType=INTEGER},
+      like_count = #{likeCount,jdbcType=INTEGER},
+      view_count = #{viewCount,jdbcType=INTEGER},
+      top = #{top,jdbcType=INTEGER},
+      last_reply = #{lastReply,jdbcType=TIMESTAMP},
+      status = #{status,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      topic_url =  #{topicUrl,jdbcType=VARCHAR},
+      content = #{content,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.slljr.finance.common.pojo.model.ForumTopic">
+    update forum_topic
+    set uid = #{uid,jdbcType=INTEGER},
+      title = #{title,jdbcType=VARCHAR},
+      section_id = #{sectionId,jdbcType=INTEGER},
+      reply_count = #{replyCount,jdbcType=INTEGER},
+      like_count = #{likeCount,jdbcType=INTEGER},
+      view_count = #{viewCount,jdbcType=INTEGER},
+      top = #{top,jdbcType=INTEGER},
+      last_reply = #{lastReply,jdbcType=TIMESTAMP},
+      status = #{status,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      topic_url =  #{topicUrl,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="queryForumTopiclist" resultMap="VoResultMap">
+       SELECT
+			ft.*, fu.grade AS grade,uo.nick_name AS nickName,uo.head_img AS headImg
+		FROM
+			forum_topic ft  
+		LEFT JOIN forum_user fu ON ft.uid = fu.uid
+		LEFT JOIN user_basic uo ON ft.uid = uo.id
+		LEFT JOIN forum_great fg ON ft.id = fg.topic_id
+		WHERE 1= 1 and
+		ft.`status` = 0
+		<if test="id != null and id != '' ">
+	      and ft.id = #{id,jdbcType=VARCHAR}
+	    </if>
+	    <if test="uid != null and uid != '' ">
+	      and ft.uid = #{uid,jdbcType=VARCHAR}
+	    </if>
+	    <if test="title !='' and title != null">
+	      and ft.title like concat('%', #{title}, '%')
+	    </if>		       
+        order by ft.top DESC ,ft.create_time desc
+    </select>
+    <select id="queryForumTopicDetails" resultMap="VoResultMap">
+       SELECT
+			ft.*, fu.grade AS grade,uo.nick_name AS nickName,uo.head_img AS headImg
+		FROM
+			forum_topic ft  
+		LEFT JOIN forum_user fu ON ft.uid = fu.uid
+		LEFT JOIN user_basic uo ON ft.uid = uo.id
+       where ft.id = #{id,jdbcType=INTEGER} 
+       LIMIT 1
+    </select>
+    <select id="queryTopicCotent" resultType="java.lang.String">
+       SELECT
+			title
+		FROM
+			forum_topic 	
+       where id = #{id,jdbcType=INTEGER}
+    </select>
+    
+    <select id="queryUserTopicList" resultMap="VoUserResultMap">
+       SELECT
+			ft.*, fu.grade AS grade,fu.integral AS integral,uo.nick_name AS nickName,uo.head_img AS headImg,uo.sex AS sex
+		FROM
+			forum_topic ft  
+		LEFT JOIN forum_user fu ON ft.uid = fu.uid
+		LEFT JOIN user_basic uo ON ft.uid = uo.id
+       where ft.uid = #{uid,jdbcType=INTEGER} AND  ft.status = 0
+    </select>
+    
+    <update id="updateByStatus" parameterType="java.lang.Integer">
+    update forum_topic
+    set 
+      status = -1     
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

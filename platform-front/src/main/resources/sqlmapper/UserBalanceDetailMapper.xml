@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.slljr.finance.front.mapper.UserBalanceDetailMapper" >
+  <resultMap id="BaseResultMap" type="com.slljr.finance.common.pojo.model.UserBalanceDetail" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="uid" property="uid" jdbcType="INTEGER" />
+    <result column="number" property="number" jdbcType="DOUBLE" />
+    <result column="summary" property="summary" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+    <result column="balance" property="balance" jdbcType="DOUBLE" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, uid, number, summary, type, balance, status, create_time, update_time
+  </sql>
+
+  <sql id="Base_Column_List1" >
+    t.id, t.uid, t.number, t.summary, t.type, t.balance, t.status, t.create_time, t.update_time
+  </sql>
+
+  <!--返回带用户信息-->
+  <resultMap id="ResultMapWithUserBasic" type="com.slljr.finance.common.pojo.vo.UserBalanceDetailVO" extends="BaseResultMap">
+    <result column="phone" property="phone" />
+    <result column="name" property="name" />
+  </resultMap>
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from user_balance_detail
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from user_balance_detail
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.slljr.finance.common.pojo.model.UserBalanceDetail" >
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into user_balance_detail (id, uid, number, 
+      summary, type, balance, 
+      status, create_time, update_time
+      )
+    values (#{id,jdbcType=INTEGER}, #{uid,jdbcType=INTEGER}, #{number,jdbcType=DOUBLE}, 
+      #{summary,jdbcType=VARCHAR}, #{type,jdbcType=INTEGER}, #{balance,jdbcType=DOUBLE}, 
+      #{status,jdbcType=INTEGER}, sysdate(),sysdate()
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.slljr.finance.common.pojo.model.UserBalanceDetail" >
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into user_balance_detail
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="uid != null" >
+        uid,
+      </if>
+      <if test="number != null" >
+        number,
+      </if>
+      <if test="summary != null" >
+        summary,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="balance != null" >
+        balance,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      create_time,
+      update_time,
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="uid != null" >
+        #{uid,jdbcType=INTEGER},
+      </if>
+      <if test="number != null" >
+        #{number,jdbcType=DOUBLE},
+      </if>
+      <if test="summary != null" >
+        #{summary,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="balance != null" >
+        #{balance,jdbcType=DOUBLE},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      sysdate(),
+      sysdate(),
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.slljr.finance.common.pojo.model.UserBalanceDetail" >
+    update user_balance_detail
+    <set >
+      <if test="uid != null" >
+        uid = #{uid,jdbcType=INTEGER},
+      </if>
+      <if test="number != null" >
+        number = #{number,jdbcType=DOUBLE},
+      </if>
+      <if test="summary != null" >
+        summary = #{summary,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="balance != null" >
+        balance = #{balance,jdbcType=DOUBLE},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.slljr.finance.common.pojo.model.UserBalanceDetail" >
+    update user_balance_detail
+    set uid = #{uid,jdbcType=INTEGER},
+      number = #{number,jdbcType=DOUBLE},
+      summary = #{summary,jdbcType=VARCHAR},
+      type = #{type,jdbcType=INTEGER},
+      balance = #{balance,jdbcType=DOUBLE},
+      status = #{status,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <!--查询近一个月金币变更TOP20信息-->
+  <select id="findTopNearlyOneMonth" resultMap="ResultMapWithUserBasic">
+    <!--select-->
+      <!--<include refid="Base_Column_List1" />,-->
+      <!--ub.phone,-->
+      <!--ub.name-->
+    <!--from user_balance_detail t-->
+      <!--left join user_basic ub on t.uid = ub.id-->
+    <!--where t.type = 2-->
+      <!--and DATE_SUB(CURDATE(), INTERVAL 1 MONTH) &lt;= date(t.create_time)-->
+      <!--order by t.number desc-->
+    <!--limit 20-->
+
+    SELECT ub.phone,ub.name,ROUND(SUM(ubd.number),2) AS number,ubd.uid FROM user_balance_detail ubd
+    INNER JOIN user_basic ub ON ub.id=ubd.uid
+    WHERE ubd.type=2 AND ubd.number>0
+    GROUP BY ubd.uid
+    ORDER BY number DESC
+    limit 20
+  </select>
+
+</mapper>

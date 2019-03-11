@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="stylesheet" href="./dist/css/mui.css"/>
+    <link rel="stylesheet" href="./dist/css/common.css"/>
+    <link rel="stylesheet" href="./dist/css/icons-extra.css"/>
+    <link rel="stylesheet" href="./dist/css/mui.min.css"/>
+    <title></title>
+    <style>
+        .red{
+            color:#e43937!important;
+        }
+        .articleContent img{
+            vertical-align: middle;
+        }
+    </style>
+</head>
+
+<body id="detail">
+<div class="header">
+    <div style="float: left;line-height: 4.4rem;padding-left:1.2rem"><i class="mui-icon mui-icon-arrowleft" style="font-size: 3rem;color:#fff"></i></div>
+</div>
+    <div class="mui-content detail-title content-title" style="margin-top: 4rem;"></div>
+    <div class="mui-content">
+        <div class="mui-row userMsg lzMsg"></div>
+        <div style="margin-top:1.2rem" class="articleContent"></div>
+    </div>
+    <div class="mui-content" style="margin:2rem 0 46px 0">
+        <div class="mui-row detail-title">
+            <div class="mui-col-xs-6 mui-col-sm-6 grey-text"><i class="mui-icon mui-icon mui-icon-chatboxes"></i> 全部回复</div>
+            <!--<div class="mui-col-xs-3 mui-col-sm-3 grey-text right">只看楼主</div>-->
+            <!--<div class="mui-col-xs-3 mui-col-sm-3 grey-text right">倒序浏览</div>-->
+        </div>
+       <div id="responseList"></div>
+        <div class="nomore none grey-text" style="text-align: center;margin-top:1rem;">没有更多数据了</div>
+        <div class="mui-row userMsg" style="margin-top:1.5rem">
+            <div class="mui-col-xs-1 mui-col-sm-1" style="padding-top:0.3rem;">
+                <img class="reply-userImg" src="./image/user.png" alt=""/>
+            </div>
+            <div class="mui-col-xs-11 mui-col-sm-11 userReply" style="padding-left:1rem">
+               <input class="reply-input replyArticle" type="text" placeholder="我也说一句" readonly/>
+            </div>
+
+        </div>
+    </div>
+    <div class="mui-content" style="position:fixed;bottom:0;border-top: 1px solid #efefef;width:100% ">
+        <div class="mui-row number"></div>
+    </div>
+    <script src="lib/script/jquery.min.js"></script>
+    <script src="./dist/js/mui.js"></script>
+    <!--<script src="./dist/js/mui.min.js"></script>-->
+    <script src="./dist/js/common.js"></script>
+    <script>
+        mui(".header").on('tap','.mui-icon-arrowleft',function(){
+            window.history.back();
+            return false;
+        });
+        var id=getUrlParam('id');
+        var uid=getUrlParam('uid');
+        var html='',articleLick;
+        //点赞帖子
+        mui(".number").on('tap','.like',function(){
+            if(isLogin()){
+                var like=ajax(domain+'/forumTopic/topicGreat?id='+id+'&uid='+uid,'POST','',headers);
+                if(like.code==200){
+                    if(articleLick=='true'){
+                        $(this).removeClass('red');
+                        $(this).children().removeClass('red');
+                        articleLick='false';
+                        $('.articalLikeNum').html(parseInt($('.articalLikeNum').html())-1);
+                        mui.toast('取消成功',{ duration:1500, type:'div' });
+                    }else{
+                        $(this).addClass('red');
+                        console.log($(this));
+                        $(this).children().addClass('red');
+                        articleLick='true';
+                        $('.articalLikeNum').html(parseInt($('.articalLikeNum').html())+1);
+                        mui.toast('点赞成功',{ duration:1500, type:'div' });
+                    }
+                }
+            }
+        });
+        //点赞评论
+        mui("#responseList").on('tap','.likeComment',function(){
+            var commentLike=$(this).attr('data-flag');
+            var id=$(this).attr('data-id');
+            if(isLogin()){
+                var like=ajax(domain+'/forumReply/replyGreat?id='+id+'&uid='+uid,'POST','',headers);
+                if(like.code==200){
+
+                    if(commentLike=='true'){
+                        $(this).removeClass('red');
+                        $(this).attr('data-flag','false');
+                        $(this).prev().removeClass('red');
+                        $(this).prev().html(parseInt($(this).prev().html())-1);
+                        if($(this).prev().html()<=0){
+                            $(this).prev().html('')
+                        }
+                        mui.toast('取消成功',{ duration:1500, type:'div' });
+                    }else{
+                        $(this).addClass('red');
+                        $(this).prev().addClass('red');
+                        $(this).attr('data-flag','true');
+                        $(this).prev().html(parseInt($(this).prev().html())+1);
+                        if($(this).prev().html()>0){
+                            $(this).prev().removeClass('none')
+                        }
+                        mui.toast('点赞成功',{ duration:1500, type:'div' });
+                    }
+                }
+            }
+        });
+        //回复帖子
+        mui(".lzMsg").on('tap','.replyArticle',function(){
+            reply(id);
+        });
+        mui(".userReply").on('tap','.replyArticle',function(){
+            reply(id);
+        });
+        mui(".number").on('tap','.replyArticle',function(){
+            reply(id);
+        });
+        //回复评论
+        mui("#responseList").on('tap','.replyComment',function(){
+            var cid=$(this).attr('data-id');
+            reply(id,cid);
+        });
+
+        mui("#responseList").on('tap','.toUser',function(){
+            event.stopPropagation();
+            window.location.href='mine.html?id='+$(this).attr('data-id')
+        });
+        mui(".lzMsg").on('tap','.toUser',function(){
+            event.stopPropagation();
+            window.location.href='mine.html?id='+$(this).attr('data-id')
+        });
+        var detail=ajax(domain+'/forumTopic/queryForumTopicDetails?id='+id+'&uid='+uid,'GET','',headers);
+        if(detail.code==200){
+            var obj=detail.data;
+            $('.content-title').html(`
+                <h4 style="margin-bottom:1.8rem">${obj.title}</h4>
+                <div class="mui-row">
+                    <div class="mui-col-sm-6 mui-col-xs-6 grey-text">
+                        <text style="margin-right:1rem">查看 ${obj.viewCount}</text>
+                        <text>回复 ${obj.replyCount}</text>
+                    </div>
+                </div>
+            `);
+            $('.lzMsg').html(`
+                 <div data-id="${obj.uid}" class="mui-col-xs-1 mui-col-sm-1 toUser" style="padding-top:0.3rem">
+                    <img class="userImg" src="${obj.headImg}" alt=""/>
+                </div>
+                <div class="mui-col-xs-9 mui-col-sm-9 middle" >
+                    ${obj.nickName==null?'优卡用户':obj.nickName} <span style="color:#f90;font-size: 1rem">Lv.${obj.grade}</span>
+                    <div class="grey-text">楼主 ${obj.createTime}</div>
+                </div>
+                <div class="mui-col-xs-2 mui-col-sm-2 right">
+                   <i class="mui-icon mui-icon-chat replyArticle"></i>
+                </div>
+            `);
+            $('.articleContent').html(obj.content);
+            articleLick=obj.flag;
+            $('.number').html(`
+                 <div style="text-align: center" class="mui-col-sm-6 mui-col-xs-6 replyArticle">
+                <i class="mui-icon mui-icon-chat"></i> 评论 ${obj.replyCount}
+            </div>
+            <div style="text-align: center" class="like mui-col-sm-6 mui-col-xs-6 ${articleLick=='true'?'red':''}">
+                <i class="mui-icon-extra mui-icon-extra-like ${articleLick=='true'?'red':''}"></i> 点赞 <text class="articalLikeNum">${obj.likeCount}</text>
+            </div>
+            `)
+        }
+        var html='',pageNum=1,pageSize=10,total=0;
+        function showResponseList(pageNum,pageSize){
+            var responseList=ajax(domain+'/forumReply/queryReplylist?id='+id+'&pageNum='+pageNum+'&pageSize='+pageSize+'&uid='+uid,'POST','',headers);
+            if(responseList.code==200){
+                total=responseList.total;
+                if(total==0){
+                    $('.nomore').html('暂无评论');
+                     $('.nomore').removeClass('none');
+                }
+                $.each(responseList.data,function(i,obj){
+                    html+=`
+                   <div class="response">
+                       <div class="mui-row userMsg">
+                           <div data-id="${obj.replyUid}" class="mui-col-xs-1 mui-col-sm-1 toUser"  style="padding-top:0.3rem">
+                               <img class="userImg" src="${obj.headImg}" alt=""/>
+                           </div>
+                           <div class="mui-col-xs-8 mui-col-sm-8 middle" >
+                               ${obj.nickName==null?'优卡用户':obj.nickName} <span style="color:#f90;font-size: 1rem">Lv.${obj.grade}</span>
+                               <div class="grey-text">${obj.createTime}</div>
+                           </div>
+                           <div class="mui-col-xs-3 mui-col-sm-3 right">
+                               <text class="grey-text ${obj.likeCount==0?'none':''} ${obj.flag=='true'?'red':''}"">${obj.likeCount} </text>
+                               <i class="mui-icon-extra mui-icon-extra-like likeComment ${obj.flag=='true'?'red':''}" data-id="${obj.id}" data-flag="${obj.flag}"></i>
+                               <i class="mui-icon mui-icon-chat replyComment" data-id="${obj.id}" style="margin-left:1rem"></i>
+                           </div>
+                       </div>
+                       <div style="margin-top:1.2rem;font-size: 1.4rem">
+                           <div class="reply ${obj.parentReplyUid==null?'none':''}">
+                               <div>引用：${obj.twoNickname==null?'优卡用户':obj.twoNickname} 发表于 ${obj.twoCreatetime}</div>
+                               ${obj.twoContent}
+                           </div>
+                           ${obj.content}
+                       </div>
+                   </div>
+                `;
+                });
+                $('#responseList').html(html)
+            }
+        }
+        showResponseList(pageNum,pageSize);
+
+        //滚动事件触发
+        $(document).scroll(function(){
+            if(isReachBottom()){
+                if(total>pageNum*10){
+                        pageNum++;
+                        showResponseList(pageNum,pageSize);
+                }else if(total==0){
+
+                }else{
+                    $('.nomore').html('没有更多数据了');
+                    $('.nomore').removeClass('none');
+                }
+            }
+        });
+
+
+    </script>
+
+</body>
+</html>

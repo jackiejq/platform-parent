@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.slljr.finance.front.mapper.UserBillStagingMapper">					
+  <resultMap id="BaseResultMap" type="com.slljr.finance.common.pojo.model.BillStaging">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="order_id" jdbcType="VARCHAR" property="orderId" />
+    <result column="order_state" jdbcType="INTEGER" property="orderState" />
+    <result column="num_total" jdbcType="DOUBLE" property="numTotal" />
+    <result column="amount_pay" jdbcType="DOUBLE" property="amountPay" />
+    <result column="balance" jdbcType="DOUBLE" property="balance" />
+    <result column="repayment_days" jdbcType="INTEGER" property="repaymentDays" />
+    <result column="poundage" jdbcType="DOUBLE" property="poundage" />
+    <result column="pay_passid" jdbcType="VARCHAR" property="payPassid" />
+    <result column="pay_creditcard" jdbcType="VARCHAR" property="payCreditcard" />
+    <result column="receive_creditcard" jdbcType="VARCHAR" property="receiveCreditcard" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="uid" jdbcType="INTEGER" property="uid" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, order_id, order_state, num_total, amount_pay, balance, repayment_days, poundage, 
+    pay_passid, pay_creditcard, receive_creditcard, create_time, update_time, uid
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from user_bill_staging
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from user_bill_staging
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.slljr.finance.common.pojo.model.BillStaging">
+    insert into user_bill_staging (id, order_id, order_state, 
+      num_total, amount_pay, balance, 
+      repayment_days, poundage, pay_passid, 
+      pay_creditcard, receive_creditcard, create_time, 
+      update_time, uid)
+    values (#{id,jdbcType=INTEGER}, #{orderId,jdbcType=VARCHAR}, #{orderState,jdbcType=INTEGER}, 
+      #{numTotal,jdbcType=DOUBLE}, #{amountPay,jdbcType=DOUBLE}, #{balance,jdbcType=DOUBLE}, 
+      #{repaymentDays,jdbcType=INTEGER}, #{poundage,jdbcType=DOUBLE}, #{payPassid,jdbcType=VARCHAR}, 
+      #{payCreditcard,jdbcType=VARCHAR}, #{receiveCreditcard,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{uid,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.slljr.finance.common.pojo.model.BillStaging">
+    insert into user_bill_staging
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="orderId != null">
+        order_id,
+      </if>
+      <if test="orderState != null">
+        order_state,
+      </if>
+      <if test="numTotal != null">
+        num_total,
+      </if>
+      <if test="amountPay != null">
+        amount_pay,
+      </if>
+      <if test="balance != null">
+        balance,
+      </if>
+      <if test="repaymentDays != null">
+        repayment_days,
+      </if>
+      <if test="poundage != null">
+        poundage,
+      </if>
+      <if test="payPassid != null">
+        pay_passid,
+      </if>
+      <if test="payCreditcard != null">
+        pay_creditcard,
+      </if>
+      <if test="receiveCreditcard != null">
+        receive_creditcard,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="uid != null">
+        uid,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="orderId != null">
+        #{orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="orderState != null">
+        #{orderState,jdbcType=INTEGER},
+      </if>
+      <if test="numTotal != null">
+        #{numTotal,jdbcType=DOUBLE},
+      </if>
+      <if test="amountPay != null">
+        #{amountPay,jdbcType=DOUBLE},
+      </if>
+      <if test="balance != null">
+        #{balance,jdbcType=DOUBLE},
+      </if>
+      <if test="repaymentDays != null">
+        #{repaymentDays,jdbcType=INTEGER},
+      </if>
+      <if test="poundage != null">
+        #{poundage,jdbcType=DOUBLE},
+      </if>
+      <if test="payPassid != null">
+        #{payPassid,jdbcType=VARCHAR},
+      </if>
+      <if test="payCreditcard != null">
+        #{payCreditcard,jdbcType=VARCHAR},
+      </if>
+      <if test="receiveCreditcard != null">
+        #{receiveCreditcard,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="uid != null">
+        #{uid,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.slljr.finance.common.pojo.model.BillStaging">
+    update user_bill_staging
+    <set>
+      <if test="orderId != null">
+        order_id = #{orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="orderState != null">
+        order_state = #{orderState,jdbcType=INTEGER},
+      </if>
+      <if test="numTotal != null">
+        num_total = #{numTotal,jdbcType=DOUBLE},
+      </if>
+      <if test="amountPay != null">
+        amount_pay = #{amountPay,jdbcType=DOUBLE},
+      </if>
+      <if test="balance != null">
+        balance = #{balance,jdbcType=DOUBLE},
+      </if>
+      <if test="repaymentDays != null">
+        repayment_days = #{repaymentDays,jdbcType=INTEGER},
+      </if>
+      <if test="poundage != null">
+        poundage = #{poundage,jdbcType=DOUBLE},
+      </if>
+      <if test="payPassid != null">
+        pay_passid = #{payPassid,jdbcType=VARCHAR},
+      </if>
+      <if test="payCreditcard != null">
+        pay_creditcard = #{payCreditcard,jdbcType=VARCHAR},
+      </if>
+      <if test="receiveCreditcard != null">
+        receive_creditcard = #{receiveCreditcard,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="uid != null">
+        uid = #{uid,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.slljr.finance.common.pojo.model.BillStaging">
+    update user_bill_staging
+    set order_id = #{orderId,jdbcType=VARCHAR},
+      order_state = #{orderState,jdbcType=INTEGER},
+      num_total = #{numTotal,jdbcType=DOUBLE},
+      amount_pay = #{amountPay,jdbcType=DOUBLE},
+      balance = #{balance,jdbcType=DOUBLE},
+      repayment_days = #{repaymentDays,jdbcType=INTEGER},
+      poundage = #{poundage,jdbcType=DOUBLE},
+      pay_passid = #{payPassid,jdbcType=VARCHAR},
+      pay_creditcard = #{payCreditcard,jdbcType=VARCHAR},
+      receive_creditcard = #{receiveCreditcard,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      uid = #{uid,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

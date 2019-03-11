@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.slljr.finance.front.mapper.UserAccountMapper" >
+  <resultMap id="BaseResultMap" type="com.slljr.finance.common.pojo.model.UserAccount" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="uid" property="uid" jdbcType="INTEGER" />
+    <result column="cash_balance" property="cashBalance" jdbcType="DOUBLE" />
+    <result column="integral_balance" property="integralBalance" jdbcType="DOUBLE" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="agent_level_id" property="agentLevelId" jdbcType="INTEGER" />
+  </resultMap>
+  	<resultMap id="VoBaseResultMap" type="com.slljr.finance.common.pojo.vo.UserTaskAccountVO" extends="BaseResultMap">
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="slogan" property="slogan" jdbcType="VARCHAR"/>
+    </resultMap>
+    
+    <resultMap id="VoDetailBaseResultMap" type="com.slljr.finance.common.pojo.model.UserBalanceDetail" extends="BaseResultMap">
+        <result column="number" property="number" />      
+    </resultMap>
+  
+  <sql id="Base_Column_List" >
+    id, uid, cash_balance, integral_balance, status, create_time, update_time,agent_level_id
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from user_account
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from user_account
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.slljr.finance.common.pojo.model.UserAccount" useGeneratedKeys="true" keyProperty="id">
+    insert into user_account (id, uid, cash_balance, 
+      integral_balance, status, create_time, 
+      update_time)
+    values (#{id,jdbcType=INTEGER}, #{uid,jdbcType=INTEGER}, #{cashBalance,jdbcType=DOUBLE}, 
+      #{integralBalance,jdbcType=DOUBLE}, #{status,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.slljr.finance.common.pojo.model.UserAccount" useGeneratedKeys="true" keyProperty="id">
+    insert into user_account
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="uid != null" >
+        uid,
+      </if>
+      <if test="cashBalance != null" >
+        cash_balance,
+      </if>
+      <if test="integralBalance != null" >
+        integral_balance,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="uid != null" >
+        #{uid,jdbcType=INTEGER},
+      </if>
+      <if test="cashBalance != null" >
+        #{cashBalance,jdbcType=DOUBLE},
+      </if>
+      <if test="integralBalance != null" >
+        #{integralBalance,jdbcType=DOUBLE},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.slljr.finance.common.pojo.model.UserAccount" >
+    update user_account
+    <set >
+      <if test="uid != null" >
+        uid = #{uid,jdbcType=INTEGER},
+      </if>
+      <if test="cashBalance != null" >
+        cash_balance = #{cashBalance,jdbcType=DOUBLE},
+      </if>
+      <if test="integralBalance != null" >
+        integral_balance = #{integralBalance,jdbcType=DOUBLE},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.slljr.finance.common.pojo.model.UserAccount" >
+    update user_account
+    set uid = #{uid,jdbcType=INTEGER},
+      cash_balance = #{cashBalance,jdbcType=DOUBLE},
+      integral_balance = #{integralBalance,jdbcType=DOUBLE},
+      status = #{status,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+<!--auto generated by codehelper on 2018-12-05-->
+	<select id="findByUid" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from user_account
+    where uid=#{uid,jdbcType=INTEGER}
+  	</select>
+  	
+  	<!-- 任务中心用户表头(积分和金币查询) -->
+	<select id="getUserTask" resultMap="VoBaseResultMap">
+	    SELECT
+	   		ua.uid,
+			ub.name ,
+			ub.nick_name ,
+			IFNULL(ua.cash_balance,0) AS cash_balance ,
+			IFNULL(ua.integral_balance,0) AS integral_balance
+		FROM
+			user_account ua
+		LEFT JOIN user_basic ub ON ua.uid = ub.id
+		WHERE
+			ua.uid =#{id,jdbcType=INTEGER}
+  	</select>
+
+
+	<!-- 查询用户本月获取佣金 -->
+	<select id="usercCommission"  resultMap="VoDetailBaseResultMap">
+	 	SELECT
+			ROUND(IFNULL(SUM(number),0),2) AS number
+		FROM
+			user_balance_detail 		
+		WHERE
+			uid = #{id,jdbcType=INTEGER}  AND number <![CDATA[ > ]]> 0 AND status=0 AND DATE_FORMAT( update_time, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' ) AND type = 2			
+  	</select>
+  	
+  	<!-- 查询用户累计获取佣金 -->
+	<select id="usercCommissionCount"  resultMap="VoDetailBaseResultMap">
+	    SELECT
+			IFNULL(ROUND(SUM(number),2),0) AS number
+		FROM
+			user_balance_detail 		
+		WHERE
+			uid = #{id,jdbcType=INTEGER} AND number <![CDATA[ > ]]> 0 AND status=0 AND type = 2
+  	</select>
+  	
+  	
+  
+  <update id="updateByUid" parameterType="com.slljr.finance.common.pojo.model.UserAccount" >
+    update user_account
+    <set >
+      <if test="cashBalance != null" >
+        cash_balance = #{cashBalance,jdbcType=DOUBLE},
+      </if>
+      <if test="integralBalance != null" >
+        integral_balance = #{integralBalance,jdbcType=DOUBLE},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      update_time = sysdate()
+    </set>
+    where uid = #{uid,jdbcType=INTEGER}
+  </update>
+
+<!--auto generated by codehelper on 2019-01-14-->
+	<select id="findSumCashBalanceByUid" resultType="com.slljr.finance.common.pojo.vo.InviteFriendsVO">
+        SELECT
+        ROUND(IFNULL(SUM(ubd.number),0),2) as accumulativeCash,
+        (select count(0) from user_basic where referer_uid = #{uid})        AS accumulativeCount
+        FROM user_basic ub
+        LEFT JOIN user_balance_detail ubd ON ubd.uid=ub.id
+        where ub.id=#{uid} AND ubd.type=2 AND ubd.number > 0
+    </select>
+
+</mapper>

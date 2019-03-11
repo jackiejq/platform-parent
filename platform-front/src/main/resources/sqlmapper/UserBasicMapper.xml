@@ -1,0 +1,588 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.slljr.finance.front.mapper.UserBasicMapper" >
+  <resultMap id="BaseResultMap" type="com.slljr.finance.common.pojo.model.UserBasic" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <result column="password" property="password" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="sex" property="sex" jdbcType="INTEGER" />
+    <result column="id_card" property="idCard" jdbcType="VARCHAR" />
+    <result column="nick_name" property="nickName" jdbcType="VARCHAR" />
+    <result column="idc_province" jdbcType="VARCHAR" property="idcProvince" />
+    <result column="idc_city" jdbcType="VARCHAR" property="idcCity" />
+    <result column="idc_address" jdbcType="VARCHAR" property="idcAddress" />
+    <result column="idc_img_url1" jdbcType="VARCHAR" property="idcImgUrl1" />
+    <result column="idc_img_url2" jdbcType="VARCHAR" property="idcImgUrl2" />
+    <result column="share_qr_url" jdbcType="VARCHAR" property="shareQrUrl" />
+    <result column="referer_uid" property="refererUid" jdbcType="INTEGER" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="head_img" jdbcType="VARCHAR" property="headImg" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+   <result column="grade" property="grade" jdbcType="INTEGER" />
+   <result column="integral" property="integral" jdbcType="INTEGER" />
+   <result column="forum_status" property="forumStatus" jdbcType="INTEGER" />
+  </resultMap>
+  
+  <resultMap id="ResultMapWithName" type="com.slljr.finance.common.pojo.vo.UserBasicVO" extends="BaseResultMap">
+    <result column="refererUname" property="refererUname" />
+  </resultMap>
+  
+   <resultMap id="ResultMapFriend" type="com.slljr.finance.common.pojo.vo.UserFriendsVO" extends="BaseResultMap">
+    <result column="commissionNum" property="commissionNum" />
+    <result column="paymentAmount" property="paymentAmount" />
+    <result column="agencyProfit" property="agencyProfit" />
+    <result column="payTime" property="payTime" />
+    <result column="tradeId" property="tradeId" />
+    <result column="months" property="months" />
+    <result column="month" property="month" />
+  </resultMap>
+   <resultMap id="ResultMapUserReportTotalVO" type="com.slljr.finance.common.pojo.vo.UserReportTotalVO">
+    <result column="paymentAmount" property="paymentAmount" />
+    <result column="agencyProfit" property="agencyProfit" />
+    <result column="number" property="number" />
+  </resultMap>
+  
+  <resultMap id="ResultMapWithPortion" type="com.slljr.finance.common.pojo.vo.UserBasicVO" extends="BaseResultMap">
+    <result column="isBindingCreditCard" property="isBindingCreditCard" />
+    <result column="isBindingDebitCard" property="isBindingDebitCard" />
+    <result column="isVerified" property="isVerified" />
+    <result column="levelCode" property="levelCode" />
+    <result column="levelType" property="levelType" />
+  </resultMap>
+  
+  <resultMap type="com.slljr.finance.common.pojo.vo.UserFriendsVO" id="ResultMapWithSearchByPhone">
+  	<result column="createTime" property="createTime" />
+    <result column="agencyProfit" property="agencyProfit" />
+    <result column="phone" property="phone" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    id, phone, idc_img_url1, nick_name,idc_img_url2,password, name, sex, id_card, referer_uid,
+    type, status, create_time, update_time, idc_province, idc_city, idc_address,share_qr_url,head_img,grade,integral,forum_status
+  </sql>
+
+  <sql id="Base_Column_List1" >
+    t.id, t.phone, t.password, t.name, t.sex, t.id_card, t.referer_uid, t.type, t.status, t.create_time,
+    t.update_time, t.idc_province, t.idc_city, t.idc_address,t.idc_img_url1,t.idc_img_url2,t.share_qr_url,t.head_img,t.nick_name,t.grade,t.integral,t.forum_status
+  </sql>
+
+  <sql id="Base_Column_Portion" >
+    t.id, t.phone, t.name, t.sex, t.id_card, t.referer_uid, t.type, t.status, t.create_time, t.update_time,
+    t.idc_province, t.idc_city, t.idc_address,t.idc_img_url1,t.idc_img_url2,t.share_qr_url,t.head_img,t.nick_name,t.grade,t.integral,t.forum_status
+  </sql>
+
+  <select id="selectByPhone" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from user_basic
+    where phone = #{phone}
+    limit 1
+  </select>
+  <select id="selectByPhoneAndPassword" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from user_basic
+    where phone = #{phone} and password=#{password}
+  </select>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithName" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List1" />,u1.name AS refererUname
+    from user_basic t
+    left join user_basic u1 on u1.id = t.referer_uid
+    where t.id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from user_basic
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.slljr.finance.common.pojo.model.UserBasic" useGeneratedKeys="true" keyProperty="id">
+    insert into user_basic (id, phone, password, 
+      idc_img_url1, idc_img_url2,share_qr_url, name, sex, id_card,
+      referer_uid, status, create_time, nick_name,
+      update_time, idc_province, idc_city, idc_address)
+    values (#{id,jdbcType=INTEGER}, #{phone,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{idcImgUrl1,jdbcType=VARCHAR}, #{idcImgUrl2,jdbcType=VARCHAR},
+      #{shareQrUrl,jdbcType=VARCHAR},#{name,jdbcType=VARCHAR}, #{sex,jdbcType=INTEGER}, #{idCard,jdbcType=VARCHAR},
+      #{refererUid,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{nickName,jdbcType=VARCHAR}
+      #{updateTime,jdbcType=TIMESTAMP}, #{idcProvince,jdbcType=VARCHAR}, , #{idcCity,jdbcType=VARCHAR}, , #{idcAddress,jdbcType=VARCHAR}, )
+  </insert>
+
+  <insert id="insertSelective" parameterType="com.slljr.finance.common.pojo.model.UserBasic" useGeneratedKeys="true" keyProperty="id">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into user_basic
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="phone != null" >
+        phone,
+      </if>     
+      <if test="password != null" >
+        password,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="sex != null" >
+        sex,
+      </if>
+      <if test="idCard != null" >
+        id_card,
+      </if>
+      <if test="refererUid != null" >
+        referer_uid,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+
+      create_time,
+      update_time,
+
+      <if test="idcProvince != null" >
+        idc_province,
+      </if>
+      <if test="idcCity != null" >
+        idc_city,
+      </if>
+     <if test="idcAddress != null">
+        idc_address,
+      </if>
+      <if test="idcImgUrl1 != null">
+        idc_img_url1,
+      </if>
+      <if test="idcImgUrl2 != null">
+        idc_img_url2,
+      </if>
+      <if test="shareQrUrl != null">
+        share_qr_url,
+      </if>
+      <if test="nickName != null">
+        nick_name,
+      </if>
+      <if test="headImg != null">
+         head_img,
+      </if>
+      <if test="grade != null">
+            grade,
+      </if>
+      <if test="integral != null">
+            integral,
+      </if>
+      <if test="forumStatus != null">
+        forum_status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="phone != null" >
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null" >
+        #{sex,jdbcType=INTEGER},
+      </if>
+      <if test="idCard != null" >
+        #{idCard,jdbcType=VARCHAR},
+      </if>
+      <if test="refererUid != null" >
+        #{refererUid,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+
+      sysdate(),
+
+      sysdate(),
+
+      <if test="idcProvince != null" >
+        #{idcProvince,jdbcType=VARCHAR},
+      </if>
+      <if test="idcCity != null" >
+        #{idcCity,jdbcType=VARCHAR},
+      </if>
+      <if test="idcAddress != null" >
+        #{idcAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="idcImgUrl1 != null">
+        #{idcImgUrl1,jdbcType=VARCHAR},
+      </if>
+      <if test="idcImgUrl2 != null">
+        #{idcImgUrl2,jdbcType=VARCHAR},
+      </if>
+      <if test="shareQrUrl != null">
+        #{shareQrUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="nickName != null">
+        #{nickName,jdbcType=VARCHAR},
+      </if>
+      <if test="headImg != null">
+        #{headImg,jdbcType=VARCHAR},
+      </if>
+     <if test="grade != null">
+         #{grade,jdbcType=INTEGER},
+     </if>
+     <if test="integral != null">
+         #{integral,jdbcType=INTEGER},
+     </if>
+     <if test="forumStatus != null">
+         #{forumStatus,jdbcType=INTEGER},
+     </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.slljr.finance.common.pojo.model.UserBasic" >
+    update user_basic
+    <set>
+      <if test="phone != null" >
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        password = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null" >
+        sex = #{sex,jdbcType=INTEGER},
+      </if>
+      <if test="idCard != null" >
+        id_card = #{idCard,jdbcType=VARCHAR},
+      </if>
+      <if test="refererUid != null" >
+        referer_uid = #{refererUid,jdbcType=INTEGER},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="idcProvince != null" >
+        idc_province = #{idcProvince,jdbcType=VARCHAR},
+      </if>
+      <if test="idcCity != null" >
+        idc_city = #{idcCity,jdbcType=VARCHAR},
+      </if>
+      <if test="idcAddress != null" >
+        idc_address = #{idcAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="idcProvince != null" >
+        idc_province = #{idcProvince,jdbcType=VARCHAR},
+      </if>
+      <if test="idcCity != null" >
+        idc_city = #{idcCity,jdbcType=VARCHAR},
+      </if>
+      <if test="idcImgUrl1 != null">
+        idc_img_url1 = #{idcImgUrl1,jdbcType=VARCHAR},
+      </if>
+      <if test="idcImgUrl2 != null">
+        idc_img_url2 = #{idcImgUrl2,jdbcType=VARCHAR},
+      </if>
+      <if test="shareQrUrl != null">
+        share_qr_url = #{shareQrUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="nickName != null">
+        nick_name = #{nickName,jdbcType=VARCHAR},
+      </if>
+      <if test="headImg != null">
+        head_img = #{headImg,jdbcType=VARCHAR},
+      </if>
+      <if test="grade != null">
+        grade = #{grade,jdbcType=INTEGER},
+      </if>
+      <if test="integral != null">
+        integral = #{integral,jdbcType=INTEGER},
+      </if>
+      <if test="forumStatus != null">
+        forum_status = #{forumStatus,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <update id="updateByPrimaryKey" parameterType="com.slljr.finance.common.pojo.model.UserBasic" >
+    update user_basic
+    set phone = #{phone,jdbcType=VARCHAR},
+      password = #{password,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      sex = #{sex,jdbcType=INTEGER},
+      id_card = #{idCard,jdbcType=VARCHAR},
+      referer_uid = #{refererUid,jdbcType=INTEGER},
+      type = #{type,jdbcType=INTEGER},
+      status = #{status,jdbcType=INTEGER},
+      update_time = sysdate(),
+      idc_province = #{idcProvince,jdbcType=VARCHAR},
+      idc_city = #{idcCity,jdbcType=VARCHAR},
+       idc_img_url1 = #{idcImgUrl1,jdbcType=VARCHAR},
+      idc_img_url2 = #{idcImgUrl2,jdbcType=VARCHAR},
+      share_qr_url = #{shareQrUrl,jdbcType=VARCHAR},
+      idc_address = #{idcAddress,jdbcType=VARCHAR},
+      nick_name = #{nickName,jdbcType=VARCHAR},
+      grade = #{grade,jdbcType=INTEGER},
+      integral = #{integral,jdbcType=INTEGER},
+      forum_status = #{forumStatus,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+<!--auto generated by codehelper on 2018-12-12-->
+	<select id="findByAll" resultMap="ResultMapWithName">
+        select
+        <include refid="Base_Column_List1"/>,u1.name AS refererUname
+        from user_basic t
+        left join user_basic u1 on u1.id = t.referer_uid
+        where 1=1
+        <if test="id!=null">
+            and t.id=#{id,jdbcType=INTEGER}
+        </if>
+        <if test="phone!=null">
+            and t.phone=#{phone,jdbcType=VARCHAR}
+        </if>
+        <if test="password!=null">
+            and t.password=#{password,jdbcType=VARCHAR}
+        </if>
+        <if test="name!=null">
+            and t.name=#{name,jdbcType=VARCHAR}
+        </if>
+        <if test="sex!=null">
+            and t.sex=#{sex,jdbcType=INTEGER}
+        </if>
+        <if test="idCard!=null">
+            and t.id_card=#{idCard,jdbcType=VARCHAR}
+        </if>        
+        <if test="refererUid!=null">
+            and t.referer_uid=#{refererUid,jdbcType=INTEGER}
+        </if>
+        <if test="type!=null">
+            and t.type=#{type,jdbcType=INTEGER}
+        </if>
+        <if test="status!=null">
+            and t.status=#{status,jdbcType=INTEGER}
+        </if>
+        order by t.create_time desc
+    </select>
+
+  <select id="selectPortionById" parameterType="java.lang.Integer" resultMap="ResultMapWithPortion">
+      select
+          <include refid="Base_Column_Portion"/>,
+          case when bc.bank_card_no is null
+          then -1
+          else 0 end       AS isBindingCreditCard,
+          case when bc1.bank_card_no is null
+          then -1
+          else 0 end       AS isBindingDebitCard,
+          case when CHAR_LENGTH(t.name) is null or CHAR_LENGTH(t.id_card) is null or CHAR_LENGTH(t.name) &lt;=0 or
+          CHAR_LENGTH(t.id_card) &lt;=0
+          then -1
+          else 0 end       AS isVerified,
+          level.level_code AS levelCode,
+          level.type       AS levelType
+      from user_basic t
+      left join user_bank_card bc on t.id = bc.uid and bc.bank_card_type = 1 AND bc.status = 0
+      left join user_bank_card bc1 on t.id = bc1.uid and bc1.bank_card_type = 2 AND bc1.status = 0
+      left join user_account account on account.uid = t.id
+      left join agent_level level on level.id = account.agent_level_id and t.type = 1
+      where t.id = #{id,jdbcType=INTEGER} AND t.status = 0
+      order by bc.create_time desc
+      limit 1
+  </select>
+  <!-- 查询用户邀请好友总数量 -->
+  <select id="totalNumber" resultType="java.lang.Integer">
+    select
+      count(0)
+    from user_basic
+    where referer_uid = #{id,jdbcType=INTEGER} 
+  </select>  
+  <!-- 查询本月邀请好友数 -->
+  <select id="monthTotal" resultType="java.lang.Integer">
+    select
+    count(0)
+    from user_basic
+    where referer_uid =  #{id,jdbcType=INTEGER} AND DATE_FORMAT( create_time, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' ) 
+  </select> 
+    
+  <!-- 查询好友注册/佣金信息 -->
+  <select id="queryFriendsInfo"  resultMap="ResultMapFriend">
+    SELECT
+      ub.id,
+      ROUND(SUM(IFNULL(uto.agency_profit,0)),2) AS commissionNum,
+      date_format(ub.create_time,'%Y年%m月')  AS months,
+      ub.NAME,
+      ub.phone,
+      ub.create_time
+    FROM user_basic AS ub
+    LEFT JOIN user_trade_order AS uto ON uto.uid = ub.id
+    WHERE
+        ub.referer_uid = #{id,jdbcType=INTEGER}
+        <if test="month!=null and month != ''">
+            and DATE_FORMAT(ub.create_time, '%Y%m') =  #{month}
+        </if>
+    GROUP BY ub.id
+    ORDER BY ub.create_time DESC
+  </select>
+
+  <!-- 查询用户好友的手机号/交易时间/交易金额/佣金 -->
+   <select id="getUserTaskAndTrad"  resultMap="ResultMapFriend">
+		SELECT
+			b.id AS uid,
+			c.id AS tradeId,
+			IFNULL(c.update_time, 0) AS payTime,
+			b.`name`,
+			IFNULL(sum(c.payment_amount), 0) AS paymentAmount,
+			IFNULL(c.agency_profit, 0) AS agencyProfit,
+			b.phone
+		FROM
+			user_basic AS b
+		LEFT JOIN user_balance_detail AS a ON a.uid = b.id
+		LEFT JOIN user_trade_order c ON c.uid = b.id
+		WHERE 1=1
+		 <if test="startTime!=null">
+	        and c.update_time &gt;= #{startTime}
+	      </if>
+	      <if test="endTime!=null">
+	        and c.update_time &lt;= #{endTime}
+	      </if>
+	      <if test="phone!=null">
+	     and b.phone like concat('%',#{phone},'%') 
+	      </if>
+		AND b.referer_uid = #{id,jdbcType=INTEGER} 
+		AND b.type = 1
+		AND c.status = 2	
+		GROUP BY
+		c.update_time DESC
+  </select> 
+  <!-- 通过手机号码查询详情 -->
+  <select id="queryFriendsByPhone"  resultMap="ResultMapWithSearchByPhone">
+			SELECT
+				b.create_time AS createTime,
+				IFNULL(ROUND(SUM(c.agency_profit),2),0) AS agencyProfit,
+				b.phone AS phone
+			FROM
+				user_basic AS b
+			LEFT JOIN user_trade_order c ON c.uid = b.id
+			WHERE
+			b.referer_uid = #{id,jdbcType=INTEGER} 
+			AND b.phone like concat('%',#{phone},'%')
+			group by b.id
+  </select> 
+    <!-- 好友明细 -->
+  <select id="queryFriendsDetail"  resultMap="ResultMapFriend">
+			 SELECT
+					c.id,
+					c.create_time,
+					IFNULL(c.payment_amount,0) AS paymentAmount,
+					IFNULL(ROUND(c.agency_profit, 2),0) AS agencyProfit
+				FROM
+					user_basic AS b
+				LEFT JOIN user_trade_order c ON c.uid = b.id
+				where b.referer_uid= #{id,jdbcType=INTEGER}  and b.phone = #{phone,jdbcType=VARCHAR}   AND c.agency_profit IS NOT NULL AND c.status =2
+				ORDER BY c.id DESC			  			
+  </select> 
+  <!-- queryInfo -->
+   <select id="queryInfo"  resultMap="BaseResultMap">
+			    SELECT
+					phone,
+					create_time
+				FROM
+					user_basic 
+				WHERE referer_uid= #{id,jdbcType=INTEGER}  and phone = #{phone,jdbcType=VARCHAR}  						  			
+  </select> 
+  <!-- 查询佣金详情 -->
+  <select id="queryCommissionDetail"  resultMap="ResultMapFriend">
+     SELECT
+			c.id AS tradeId,
+			IFNULL(c.update_time, 0)    AS payTime,
+			b.`name`,
+			IFNULL(c.payment_amount, 0) AS paymentAmount,
+			IFNULL(c.agency_profit, 0)  AS agencyProfit,
+			b.phone
+		FROM
+			user_basic AS b
+		LEFT JOIN user_trade_order c ON c.uid = b.id
+		WHERE 1=1	
+		  <if test="startTime!=null">
+	        and c.update_time &gt;= #{startTime}
+	      </if>
+	      <if test="endTime!=null">
+	        and c.update_time &lt;= #{endTime}
+	      </if>	
+		AND b.referer_uid = #{id,jdbcType=INTEGER} 
+		AND c.status = 2
+		AND c.agency_profit IS NOT NULL
+		GROUP BY
+		c.id DESC
+  </select>
+
+    <!-- 查询代理总佣金 -->
+    <select id="querySumCommission" resultType="java.util.Map">
+        SELECT
+          IFNULL(round(sum(c.agency_profit),2), 0) AS agencyProfit,
+          COUNT(DISTINCT c.uid)                    AS totalNumber
+        FROM
+        user_basic AS b
+        LEFT JOIN user_trade_order c ON c.uid = b.id
+        WHERE 1=1
+        <if test="startTime!=null">
+            and c.update_time &gt;= #{startTime}
+        </if>
+        <if test="endTime!=null">
+            and c.update_time &lt;= #{endTime}
+        </if>
+        AND b.referer_uid = #{id,jdbcType=INTEGER}
+        AND c.status = 2
+        AND c.agency_profit IS NOT NULL
+    </select>
+
+    <!-- 查询佣金详情总人数 -->
+  <select id="selectTotalNumber"  resultType="java.lang.Integer">
+		SELECT
+			COUNT(DISTINCT c.uid)
+		FROM
+			user_basic AS b
+		LEFT JOIN user_trade_order c ON c.uid = b.id
+		WHERE 1=1	
+		  <if test="startTime!=null">
+	        and c.update_time &gt;= #{startTime}
+	      </if>
+	      <if test="endTime!=null">
+	        and c.update_time &lt;= #{endTime}
+	      </if>	
+		AND b.referer_uid = #{id,jdbcType=INTEGER} 
+		AND c.status = 2
+		AND c.agency_profit IS NOT NULL					  			
+  </select>
+
+    <!-- 查询邀请好友统计报表 -->
+    <select id="selectCommissionReport"  resultMap="ResultMapUserReportTotalVO">
+        SELECT
+            COUNT(DISTINCT ub.id) AS number,
+            IFNULL(ROUND(SUM(uto.agency_profit),2),0) AS agencyProfit,
+            IFNULL(ROUND(SUM(uto.payment_amount),2),0) AS paymentAmount
+        FROM
+            user_basic AS ub
+        LEFT JOIN user_trade_order AS uto ON uto.uid = ub.id
+        INNER JOIN user_proxy_audit upa on upa.uid = #{uid,jdbcType=INTEGER} and upa.audit_status = 1
+        WHERE
+        (ub.referer_uid = #{uid,jdbcType=INTEGER} or ub.id = #{uid,jdbcType=INTEGER})
+        AND uto.STATUS = 2
+        AND uto.update_time <![CDATA[>=]]> #{startTime}
+        AND uto.update_time <![CDATA[<=]]> #{endTime}
+        AND uto.agency_profit IS NOT NULL
+        AND uto.agency_profit <![CDATA[>]]> 0
+        AND uto.update_time > upa.update_time
+    </select>
+</mapper>

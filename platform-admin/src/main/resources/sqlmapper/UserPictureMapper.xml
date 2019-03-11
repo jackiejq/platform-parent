@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.slljr.finance.forum.mapper.UserPictureMapper">
+  <resultMap id="BaseResultMap" type="com.slljr.finance.common.pojo.model.UserPicture">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="tid" jdbcType="INTEGER" property="tid" />
+    <result column="tcode" jdbcType="VARCHAR" property="tcode" />
+    <result column="turl" jdbcType="VARCHAR" property="turl" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, tid, tcode, turl
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from user_picture
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from user_picture
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.slljr.finance.common.pojo.model.UserPicture">
+    insert into user_picture (id, tid, tcode, 
+      turl)
+    values (#{id,jdbcType=INTEGER}, #{tid,jdbcType=INTEGER}, #{tcode,jdbcType=VARCHAR}, 
+      #{turl,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.slljr.finance.common.pojo.model.UserPicture">
+    insert into user_picture
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="tid != null">
+        tid,
+      </if>
+      <if test="tcode != null">
+        tcode,
+      </if>
+      <if test="turl != null">
+        turl,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="tid != null">
+        #{tid,jdbcType=INTEGER},
+      </if>
+      <if test="tcode != null">
+        #{tcode,jdbcType=VARCHAR},
+      </if>
+      <if test="turl != null">
+        #{turl,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.slljr.finance.common.pojo.model.UserPicture">
+    update user_picture
+    <set>
+      <if test="tid != null">
+        tid = #{tid,jdbcType=INTEGER},
+      </if>
+      <if test="tcode != null">
+        tcode = #{tcode,jdbcType=VARCHAR},
+      </if>
+      <if test="turl != null">
+        turl = #{turl,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.slljr.finance.common.pojo.model.UserPicture">
+    update user_picture
+    set tid = #{tid,jdbcType=INTEGER},
+      tcode = #{tcode,jdbcType=VARCHAR},
+      turl = #{turl,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

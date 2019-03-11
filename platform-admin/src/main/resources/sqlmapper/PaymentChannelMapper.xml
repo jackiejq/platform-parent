@@ -1,0 +1,320 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.slljr.finance.admin.mapper.PaymentChannelMapper">
+  <resultMap id="BaseResultMap" type="com.slljr.finance.common.pojo.model.PaymentChannel">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="code" jdbcType="VARCHAR" property="code" />
+    <result column="payment_rate" jdbcType="DOUBLE" property="paymentRate" />
+    <result column="user_payment_rate" jdbcType="DOUBLE" property="userPaymentRate" />
+    <result column="withdraw_charge" jdbcType="DOUBLE" property="withdrawCharge" />
+    <result column="user_withdraw_charge" jdbcType="DOUBLE" property="userWithdrawCharge" />
+    <result column="merchant_no" jdbcType="VARCHAR" property="merchantNo" />
+    <result column="encrypt_key" jdbcType="VARCHAR" property="encryptKey" />
+    <result column="http_url" jdbcType="VARCHAR" property="httpUrl" />
+    <result column="notify_url" jdbcType="VARCHAR" property="notifyUrl" />
+    <result column="other_params" jdbcType="VARCHAR" property="otherParams" />
+    <result column="run_time_start" jdbcType="VARCHAR" property="runTimeStart" />
+    <result column="run_time_end" jdbcType="VARCHAR" property="runTimeEnd" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, name, code, payment_rate, user_payment_rate, withdraw_charge, user_withdraw_charge, 
+    merchant_no, encrypt_key, http_url, other_params, run_time_start, run_time_end,notify_url, type, 
+    status, create_time, update_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from payment_channel
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+   <select id="findPaymentChannelList" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from payment_channel
+    where status in(-1,1)
+     <if test="id!=null">
+       and id=#{id,jdbcType=INTEGER}
+     </if>
+     <if test="name!=null">
+       and name=#{name,jdbcType=VARCHAR}
+     </if>
+     <if test="code!=null">
+       and code=#{code,jdbcType=VARCHAR}
+     </if>
+     <if test="paymentRate!=null">
+       and payment_rate=#{paymentRate,jdbcType=DOUBLE}
+     </if>
+     <if test="userPaymentRate!=null">
+       and user_payment_rate=#{userPaymentRate,jdbcType=DOUBLE}
+     </if>
+     <if test="withdrawCharge!=null">
+       and withdraw_charge=#{withdrawCharge,jdbcType=DOUBLE}
+     </if>
+     <if test="userWithdrawCharge!=null">
+       and user_withdraw_charge=#{userWithdrawCharge,jdbcType=DOUBLE}
+     </if>
+     <if test="merchantNo!=null">
+       and merchant_no=#{merchantNo,jdbcType=VARCHAR}
+     </if>
+     <if test="encryptKey!=null">
+       and encrypt_key=#{encryptKey,jdbcType=VARCHAR}
+     </if>
+     <if test="httpUrl!=null">
+       and http_url=#{httpUrl,jdbcType=VARCHAR}
+     </if>
+     <if test="notifyUrl!=null">
+       and notify_url=#{notifyUrl,jdbcType=VARCHAR}
+     </if>
+     <if test="otherParams!=null">
+       and other_params=#{otherParams,jdbcType=VARCHAR}
+     </if>
+     <if test="runTimeStart!=null">
+       and run_time_start=#{runTimeStart,jdbcType=VARCHAR}
+     </if>
+     <if test="runTimeEnd!=null">
+       and run_time_end=#{runTimeEnd,jdbcType=VARCHAR}
+     </if>
+     <if test="type!=null">
+       and type=#{type,jdbcType=INTEGER}
+     </if>
+     <if test="status!=null">
+       and status=#{status,jdbcType=INTEGER}
+     </if>
+     <if test="createTime!=null">
+       and create_time=#{createTime,jdbcType=TIMESTAMP}
+     </if>
+     <if test="updateTime!=null">
+       and update_time=#{updateTime,jdbcType=TIMESTAMP}
+     </if>
+      order by create_time desc
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from payment_channel
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.slljr.finance.common.pojo.model.PaymentChannel">
+    insert into payment_channel (id, name, code, 
+      payment_rate, user_payment_rate, withdraw_charge, 
+      user_withdraw_charge, merchant_no, encrypt_key, 
+      http_url, other_params, run_time_start, 
+      run_time_end,notify_url, type, status, 
+      create_time, update_time)
+    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR}, 
+      #{paymentRate,jdbcType=DOUBLE}, #{userPaymentRate,jdbcType=DOUBLE}, #{withdrawCharge,jdbcType=DOUBLE}, 
+      #{userWithdrawCharge,jdbcType=DOUBLE}, #{merchantNo,jdbcType=VARCHAR}, #{encryptKey,jdbcType=VARCHAR}, 
+      #{httpUrl,jdbcType=VARCHAR}, #{otherParams,jdbcType=VARCHAR}, #{runTimeStart,jdbcType=VARCHAR}, 
+      #{runTimeEnd,jdbcType=VARCHAR},#{type,jdbcType=INTEGER}, #{type,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.slljr.finance.common.pojo.model.PaymentChannel">
+    insert into payment_channel
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="code != null">
+        code,
+      </if>
+      <if test="paymentRate != null">
+        payment_rate,
+      </if>
+      <if test="userPaymentRate != null">
+        user_payment_rate,
+      </if>
+      <if test="withdrawCharge != null">
+        withdraw_charge,
+      </if>
+      <if test="userWithdrawCharge != null">
+        user_withdraw_charge,
+      </if>
+      <if test="merchantNo != null">
+        merchant_no,
+      </if>
+      <if test="encryptKey != null">
+        encrypt_key,
+      </if>
+      <if test="httpUrl != null">
+        http_url,
+      </if>
+      <if test="otherParams != null">
+        other_params,
+      </if>
+      <if test="runTimeStart != null">
+        run_time_start,
+      </if>
+      <if test="runTimeEnd != null">
+        run_time_end,
+      </if>
+       <if test="notifyUrl != null">
+        notify_url,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="code != null">
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="paymentRate != null">
+        #{paymentRate,jdbcType=DOUBLE},
+      </if>
+      <if test="userPaymentRate != null">
+        #{userPaymentRate,jdbcType=DOUBLE},
+      </if>
+      <if test="withdrawCharge != null">
+        #{withdrawCharge,jdbcType=DOUBLE},
+      </if>
+      <if test="userWithdrawCharge != null">
+        #{userWithdrawCharge,jdbcType=DOUBLE},
+      </if>
+      <if test="merchantNo != null">
+        #{merchantNo,jdbcType=VARCHAR},
+      </if>
+      <if test="encryptKey != null">
+        #{encryptKey,jdbcType=VARCHAR},
+      </if>
+      <if test="httpUrl != null">
+        #{httpUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="otherParams != null">
+        #{otherParams,jdbcType=VARCHAR},
+      </if>
+      <if test="runTimeStart != null">
+        #{runTimeStart,jdbcType=VARCHAR},
+      </if>
+      <if test="runTimeEnd != null">
+        #{runTimeEnd,jdbcType=VARCHAR},
+      </if>
+       <if test="notifyUrl != null">
+        #{notifyUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.slljr.finance.common.pojo.model.PaymentChannel">
+    update payment_channel
+    <set>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="code != null">
+        code = #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="paymentRate != null">
+        payment_rate = #{paymentRate,jdbcType=DOUBLE},
+      </if>
+      <if test="userPaymentRate != null">
+        user_payment_rate = #{userPaymentRate,jdbcType=DOUBLE},
+      </if>
+      <if test="withdrawCharge != null">
+        withdraw_charge = #{withdrawCharge,jdbcType=DOUBLE},
+      </if>
+      <if test="userWithdrawCharge != null">
+        user_withdraw_charge = #{userWithdrawCharge,jdbcType=DOUBLE},
+      </if>
+      <if test="merchantNo != null">
+        merchant_no = #{merchantNo,jdbcType=VARCHAR},
+      </if>
+      <if test="encryptKey != null">
+        encrypt_key = #{encryptKey,jdbcType=VARCHAR},
+      </if>
+      <if test="httpUrl != null">
+        http_url = #{httpUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="otherParams != null">
+        other_params = #{otherParams,jdbcType=VARCHAR},
+      </if>
+      <if test="runTimeStart != null">
+        run_time_start = #{runTimeStart,jdbcType=VARCHAR},
+      </if>
+      <if test="runTimeEnd != null">
+        run_time_end = #{runTimeEnd,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        type = #{type,jdbcType=INTEGER},
+      </if>
+       <if test="notifyUrl != null">
+       notify_url= #{notifyUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.slljr.finance.common.pojo.model.PaymentChannel">
+    update payment_channel
+    set name = #{name,jdbcType=VARCHAR},
+      code = #{code,jdbcType=VARCHAR},
+      payment_rate = #{paymentRate,jdbcType=DOUBLE},
+      user_payment_rate = #{userPaymentRate,jdbcType=DOUBLE},
+      withdraw_charge = #{withdrawCharge,jdbcType=DOUBLE},
+      user_withdraw_charge = #{userWithdrawCharge,jdbcType=DOUBLE},
+      merchant_no = #{merchantNo,jdbcType=VARCHAR},
+      encrypt_key = #{encryptKey,jdbcType=VARCHAR},
+      notify_url = #{notifyUrl,jdbcType=VARCHAR},
+      http_url = #{httpUrl,jdbcType=VARCHAR},
+      other_params = #{otherParams,jdbcType=VARCHAR},
+      run_time_start = #{runTimeStart,jdbcType=VARCHAR},
+      run_time_end = #{runTimeEnd,jdbcType=VARCHAR},
+      type = #{type,jdbcType=INTEGER},
+      status = #{status,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="deleteByPaymentChannel" parameterType="com.slljr.finance.common.pojo.model.PaymentChannel">
+    update payment_channel
+    set status = 0
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+<!--auto generated by codehelper on 2019-01-08-->
+	<select id="findByType" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from payment_channel
+        where type=#{type,jdbcType=INTEGER}
+    </select>
+</mapper>

@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.slljr.finance.front.mapper.BasicRegionMapper" >
+  <resultMap id="BaseResultMap" type="com.slljr.finance.common.pojo.model.BasicRegion" >
+    <id column="region_id" property="regionId" jdbcType="VARCHAR" />
+    <result column="region_name" property="regionName" jdbcType="VARCHAR" />
+    <result column="region_short_name" property="regionShortName" jdbcType="VARCHAR" />
+    <result column="region_code" property="regionCode" jdbcType="VARCHAR" />
+    <result column="region_parent_id" property="regionParentId" jdbcType="VARCHAR" />
+    <result column="region_level" property="regionLevel" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    region_id, region_name, region_short_name, region_code, region_parent_id, region_level, 
+    create_time, update_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from basic_region
+    where region_id = #{regionId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from basic_region
+    where region_id = #{regionId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.slljr.finance.common.pojo.model.BasicRegion" >
+    insert into basic_region (region_id, region_name, region_short_name, 
+      region_code, region_parent_id, region_level, 
+      create_time, update_time)
+    values (#{regionId,jdbcType=VARCHAR}, #{regionName,jdbcType=VARCHAR}, #{regionShortName,jdbcType=VARCHAR}, 
+      #{regionCode,jdbcType=VARCHAR}, #{regionParentId,jdbcType=VARCHAR}, #{regionLevel,jdbcType=INTEGER}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.slljr.finance.common.pojo.model.BasicRegion" >
+    insert into basic_region
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="regionId != null" >
+        region_id,
+      </if>
+      <if test="regionName != null" >
+        region_name,
+      </if>
+      <if test="regionShortName != null" >
+        region_short_name,
+      </if>
+      <if test="regionCode != null" >
+        region_code,
+      </if>
+      <if test="regionParentId != null" >
+        region_parent_id,
+      </if>
+      <if test="regionLevel != null" >
+        region_level,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="regionId != null" >
+        #{regionId,jdbcType=VARCHAR},
+      </if>
+      <if test="regionName != null" >
+        #{regionName,jdbcType=VARCHAR},
+      </if>
+      <if test="regionShortName != null" >
+        #{regionShortName,jdbcType=VARCHAR},
+      </if>
+      <if test="regionCode != null" >
+        #{regionCode,jdbcType=VARCHAR},
+      </if>
+      <if test="regionParentId != null" >
+        #{regionParentId,jdbcType=VARCHAR},
+      </if>
+      <if test="regionLevel != null" >
+        #{regionLevel,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.slljr.finance.common.pojo.model.BasicRegion" >
+    update basic_region
+    <set >
+      <if test="regionName != null" >
+        region_name = #{regionName,jdbcType=VARCHAR},
+      </if>
+      <if test="regionShortName != null" >
+        region_short_name = #{regionShortName,jdbcType=VARCHAR},
+      </if>
+      <if test="regionCode != null" >
+        region_code = #{regionCode,jdbcType=VARCHAR},
+      </if>
+      <if test="regionParentId != null" >
+        region_parent_id = #{regionParentId,jdbcType=VARCHAR},
+      </if>
+      <if test="regionLevel != null" >
+        region_level = #{regionLevel,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where region_id = #{regionId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.slljr.finance.common.pojo.model.BasicRegion" >
+    update basic_region
+    set region_name = #{regionName,jdbcType=VARCHAR},
+      region_short_name = #{regionShortName,jdbcType=VARCHAR},
+      region_code = #{regionCode,jdbcType=VARCHAR},
+      region_parent_id = #{regionParentId,jdbcType=VARCHAR},
+      region_level = #{regionLevel,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where region_id = #{regionId,jdbcType=VARCHAR}
+  </update>
+</mapper>

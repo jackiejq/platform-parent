@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="stylesheet" href="./dist/css/mui.css"/>
+    <link rel="stylesheet" href="./dist/css/common.css"/>
+    <link rel="stylesheet" href="./dist/css/icons-extra.css"/>
+    <link rel="stylesheet" href="./dist/css/mui.min.css"/>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="lib/css/bootstrap.css"/>
+    <link rel="stylesheet" href="lib/css/jquery.mCustomScrollbar.min.css"/>
+    <link rel="stylesheet" href="dist/css/jquery.emoji.css"/>
+    <link rel="stylesheet" href="lib/css/railscasts.css"/>
+    <link rel="stylesheet" href="dist/css/index.css"/>
+    <title></title>
+    <style>
+       #emoji_container_1{
+           left:0!important;
+       }
+        img{
+            max-width:6rem;max-height:10rem
+        }
+        .float{
+            float: left;
+            margin:1rem 0 0 2rem
+        }
+    </style>
+</head>
+
+<body>
+<div class="header">
+    <div style="float: left;line-height: 4.4rem;padding-left:1.2rem"><i class="mui-icon mui-icon-arrowleft" style="font-size: 3rem;color:#fff"></i></div>
+    <!--<div style="float: left;line-height: 4.4rem;padding-left:1.2rem"><i class="mui-icon mui-icon-home" style="font-size: 3rem;color:#fff"></i></div>-->
+    <div class="header-right publish" style="text-align: right;color:#ffffff;padding-right:1.2rem">
+        回复
+    </div>
+</div>
+<form class="mui-input-group" style="margin-top:4rem;">
+    <div class="mui-input-row">
+        <input type="text" class="mui-input-clear" name="title" disabled>
+    </div>
+    <div class="mui-input-row" name="content" style="padding:10px 15px;height:62px"></div>
+    <div>
+        <div id="editor" contenteditable="true" style="border: none;box-shadow: none;height:auto;min-height:8rem;-webkit-user-select:text"></div>
+    </div>
+</form>
+<div style="line-height: 2.8rem;">
+    <img src="./image/emoji.png" id="btn" style="border-radius: 50%;height:2rem;width:2rem;margin:-0.5rem 0 0 2rem;vertical-align: middle">
+    <div id="imgShow" class="imgShow"></div>
+</div>
+<script src="lib/script/jquery.min.js"></script>
+<!--[if gt IE 8]><!--> <script src="lib/script/highlight.pack.js"></script> <script>hljs.initHighlightingOnLoad();</script> <!--<![endif]-->
+<script src="lib/script/jquery.mousewheel-3.0.6.min.js"></script>
+<script src="lib/script/jquery.mCustomScrollbar.min.js"></script>
+<script src="src/js/jquery.emoji.js"></script>
+    <script src="./dist/js/mui.js"></script>
+    <!--<script src="./dist/js/mui.min.js"></script>-->
+    <script src="./dist/js/common.js"></script>
+    <script>
+        mui(".header").on('tap','.mui-icon-arrowleft',function(){
+            window.history.back();
+            return false;
+        });
+        var id=getUrlParam('id');
+        var cid=getUrlParam('cid')=='undefined'||null||''?'':getUrlParam('cid');
+        console.log(cid);
+        var uid=getUrlParam('uid');
+
+       var content=ajax(domain+'/forumReply/replyEditDetails?id='+id+'&parentReplyUid='+cid,'POST','',headers);
+       if(content.code==200){
+           var obj=content.data;
+           if(obj.content){
+               $('[name=title]').val('RE:'+obj.title);
+               $('[name=content]').html(`
+             <text style="display: block">引用: ${obj.nickName==null?'优卡用户':obj.nickName} 发表于: ${obj.createTime}</text>
+             <text>${obj.content}</text>
+           `)
+           }else{
+               $('[name=title]').val('RE:'+obj);
+               $('[name=content]').addClass('none')
+           }
+       }
+        show();
+       $(".header").on("click",'.publish', function() {
+           var content=$('#editor').html();
+           var uid=sessionStorage.getItem('uid');
+           var a={'content':content,'replyUid':uid,'topicId':id,'parentReplyUid':cid};
+           if(content!=''){
+               var state=ajax(domain+'/forumReply/replyInfo','POST',a,headers);
+               if(state.code==200){
+                   mui.toast('回复成功',{ duration:1500, type:'div' });
+                   mui.later(function(){
+                       window.location.replace('detail.html?id='+id+'&uid='+uid);
+                   },1500)
+               }else{
+                   mui.alert(state.msg)
+               }
+           }else{
+               mui.toast('请输入内容',{ duration:2000, type:'div' });
+           }
+
+        });
+
+    </script>
+
+</body>
+</html>

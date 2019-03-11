@@ -1,0 +1,142 @@
+/*绿色*/
+.green-bg{
+    background-color: #5FB878;
+}
+/*粉色*/
+.pink-bg{
+    background-color:#ffaacc ;
+}
+/*灰色*/
+.grey-bg{
+    background-color: #8e8e8e;
+}
+/*橘黄*/
+.orange-bg{
+    background-color: #fe9800;
+}
+/*浅黄*/
+.yellow-bg{
+    background-color: #FFFF99;
+}
+::-webkit-scrollbar{width:0px}
+/*首页*/
+.title{
+    font-size: 18px;
+    margin-bottom: 20px;
+}
+#first  .table-box{
+    margin-bottom:5px;
+    text-align: center;
+}
+#first  .table-box div.layui-col-xs1{
+    padding:0px 5px 10px;
+    height:100px;
+    text-align: left;
+    position: relative;
+    margin-right:0.7%;
+    border-radius:10%;
+    box-shadow:0 0 5px #8e8e8e;
+    margin-bottom: 10px;
+}
+.table-box .room-num{
+    font-size: 28px;
+    font-weight: bold;
+    margin-top:5px;
+}
+.table-box .room-num2{
+    font-size: 22px;
+    font-weight: bold;
+    margin-top:5px;
+}
+.table-box .room-num span{
+    color:red;
+}
+.table-box .pay{
+    font-size: 16px;
+    position: absolute;
+    right:2%;
+    top:9px;
+}
+.table-box .pay span{
+    font-size: 18px;
+    color:#E4393C;
+}
+.table-box .connect{
+    position: absolute;
+    right:2%;
+    bottom:5px;
+}
+.table-box .time{
+    font-size: 14px;
+    text-align: center;
+}
+.table-box .pay b{
+    font-size: 18px;
+    color:#e43937;
+}
+.table-box div.type{
+    display: inline-block;
+    font-size: 16px;
+    width:24px;
+    height:24px;
+    border:1px solid;
+    border-radius: 50%;
+    position: absolute;
+    left:0;
+    top:0
+}
+.table-box div.spa{
+    display: inline-block;
+    font-size: 10px;
+    line-height:24px;
+    width:24px;
+    height:24px;
+    border:1px solid;
+    border-radius: 50%;
+    position: absolute;
+    left:0;
+    top:0
+}
+.table-box div.type{
+    font-size: 14px;
+}
+.table-box ul.tech-list{
+    margin:1px auto;
+    width:100%;
+    box-sizing: border-box;
+}
+.table-box ul.tech-list li{
+    text-align: left;
+    margin:0 auto;
+    width:100%;
+}
+.table-box ul.tech-list li span{
+    display: inline-block;
+    width:50%;
+    text-align: center;
+}
+.table-box .time2{
+    text-align: center
+}
+#first .technicians .table-box div.layui-col-xs1{
+    height:80px;
+    width:6.6%
+}
+#first .technicians .room-num{
+    margin-top:10px
+}
+.btn-row{
+    margin-bottom:20px!important;
+    text-align: center;
+}
+
+/*打印小票页*/
+.text-center{
+    text-align: center;
+    font-size: 16px;
+    margin-bottom:20px;
+}
+
+.none{
+    display:none;
+}

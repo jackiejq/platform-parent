@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+  
+  <head>
+    <meta charset="UTF-8">
+    <title>欢迎页面-X-admin2.0</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="../../../css/font.css">
+    <link rel="stylesheet" href="../../../css/xadmin.css">
+    <link rel="stylesheet" href="../../../css/common.css">
+
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+      <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <style>
+      .x-body>.layui-row>form input{
+        width:108px
+      }
+      .layui-table th,
+     td{
+          text-align: center;
+      }
+    </style>
+  </head>
+  
+  <body>
+    <div class="x-nav">
+      <span class="layui-breadcrumb">
+        <a href="">首页</a>
+        <a href="">商品管理</a>
+        <a>
+          <cite>商品列表</cite></a>
+      </span>
+        <a class="layui-btn layui-btn-sm" style="line-height:1.6em;margin-top:3px;float:right" href="javascript:location.replace(location.href);" title="刷新">
+            <i class="layui-icon" style="line-height:26px;">ဂ</i></a>
+    </div>
+    <div class="x-body">
+      <div class="layui-row">
+        <form class="layui-form layui-col-md12 x-so">
+          添加时间：<input class="layui-input begin" placeholder="开始时间" name="begin" id="start" style="width:130px">——
+          <input class="layui-input end" placeholder="结束时间" name="end" id="end" style="width:130px">
+            商品名称：<input class="layui-input" name="title">
+            兑换类型： <div class="layui-input-inline">
+            <select name="type" >
+                <option value="">请选择</option>
+                <option value="1">积分</option>
+                <option value="2">金币</option>
+                <option value="3">积分+金币</option>
+            </select>
+        </div>
+          <button id="search" class="layui-btn"><i class="layui-icon">&#xe615;</i></button>
+        </form>
+      </div>
+      <xblock>
+        <!--<button class="layui-btn layui-btn-danger" onclick="delAll()"><i class="layui-icon"></i>批量删除</button>-->
+        <button class="layui-btn" onclick="x_admin_show('新增商品','add.html',500,550)"><i class="layui-icon"></i>新增商品</button>
+      </xblock>
+      <table class="layui-table" lay-size="sm">
+        <thead>
+          <tr>
+            <th>商品ID</th>
+            <th>商品名称</th>
+            <th>兑换类型</th>
+            <th>数量</th>
+            <th>金额</th>
+            <th>分类</th>
+            <th>描述</th>
+            <th>图片</th>
+            <th>添加时间</th>
+            <th>操作</th>
+        </thead>
+          <tbody id="tbody"></tbody>
+      </table>
+      <div id="page"></div>
+
+    </div>
+    <script type="text/javascript" src="../../../js/jquery.min.js"></script>
+    <script type="text/javascript" src="../../../lib/layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="../../../js/xadmin.js"></script>
+    <script src="../../../js/common.js"></script>
+    <script src="../../../js/ajax.js"></script>
+    <script src="../../../js/tool.js"></script>
+    <script>
+      layui.use(['laypage', 'layer','laydate','form'], function() {
+        var laydate = layui.laydate;
+        var layer = layui.layer
+                , form = layui.form;
+          //执行一个laydate实例
+          laydate.render({
+              elem: '#start' //指定元素
+              , type: 'datetime'
+
+          });
+          //执行一个laydate实例
+          laydate.render({
+              elem: '#end' //指定元素
+              , type: 'datetime'
+          });
+
+        var url = domain1 + '/goods/listGoods';
+
+        var element = function (item) {
+            return `
+                  <tr>
+                  <td >${item.id}</td>
+                  <td >${item.title}</td>
+                  <td >${item.type==1?'积分':item.type==2?'金币':'积分+金币'}</td>
+                  <td >${item.count}</td>
+                  <td>${item.price==null?'':item.price}${item.price!=null&&item.priceCash!=null?'+':''}${item.priceCash==null?'':item.priceCash}</td>
+                  <td>${item.categoryName}</td>
+                  <td>${item.detail}</td>
+                  <td><img src="${item.imgUrl==null?'':item.imgUrl}" alt=""/></td>
+                   <td>${getDate(item.createTime)}</td>
+                   <td>
+                    <button class="layui-btn layui-btn-primary layui-btn-xs" onclick="x_admin_show('编辑商品','edit.html?id=${item.id}',500,550)">编辑</button>
+                    <button class="layui-btn layui-btn-danger layui-btn-xs" onclick="deleteSth(domain1+'/goods/deleteGoods/${item.id}')">删除</button>
+                   </td>
+                  </tr>
+            `
+        };
+        servePage(url, element);
+
+        $('#search').click(function(e){
+          e.preventDefault();
+          var startTime=$('.begin').val().replace(/\:/g,"%3A");
+          var endTime=$('.end').val().replace(/\:/g,"%3A");
+          var title=$('[name=title]').val();
+          var type=$('[name=type]').val();
+          var url2 = domain1 + '/goods/listGoods?startTime='+startTime+'&endTime='+endTime+'&title='+title+'&type='+type;
+          servePage2(url2, element);
+        });
+        form.render();
+      })
+    </script>
+  </body>
+
+</html>

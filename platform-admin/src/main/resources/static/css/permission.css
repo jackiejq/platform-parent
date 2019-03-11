@@ -1,0 +1,135 @@
+.left-nav,
+.page-content{
+    bottom: 0;
+    overflow: auto;
+}
+.x-body{
+    position: relative;
+    margin-left: 5px;
+    margin-right: 10px;
+    border: 1px #ccc solid;
+}
+.page-content .layui-tab-content {
+    position: relative;
+    top: 10px;
+    bottom: unset;
+
+}
+.layui-tab{
+    margin: 0;
+}
+.page-content .layui-tab-title{
+    display: inline-block;
+    background: none;
+}
+.tips{
+    position: relative;
+    display: inline-block;
+    height: 36px;
+    line-height: 36px;
+    color: #777;
+    top: 5px;
+}
+.flexCss{
+    display: flex;
+}
+.flexCss form{
+    width: 150px;
+}
+.menuChecked{
+    display: inline-block;
+}
+.rectangular .layui-form{
+    line-height: 30px;
+    text-align: center;
+    color: #fff;
+    padding: 15px;
+    margin: 10px;
+    border-radius: 5px;
+    background: #009688;
+}
+.rectangular{
+    display: flex;
+    justify-content: space-around;
+    border-bottom: 2px rgba(255, 152, 0, 1) solid;
+}
+.rectangular .layui-form p{
+    border-bottom: 1px #fff solid;
+}
+.rectangular .layui-form:nth-child(1){
+    background: #009688;
+}
+.rectangular .layui-form:nth-child(2){
+    background:rgba(37, 155, 36, 1);
+}
+.rectangular .layui-form:nth-child(3){
+    background:rgba(228, 57, 55, 1);
+}
+.rectangular .layui-form:nth-child(4){
+    background: #1E9FFF;
+}
+.rectangular .layui-form:nth-child(5){
+    background: rgba(187, 187, 187, 1);
+}
+.triangle{
+    text-align: center;
+}
+.triangle .layui-form{
+    position: relative;
+    display: inline-block;
+    margin: 10px;
+    text-align: center;
+    color: #fff;
+    width: 0;
+    height: 0;
+    border-left: 75px solid transparent;
+    border-right: 75px solid transparent;
+    border-bottom: 150px solid rgba(255, 64, 129, 1);
+}
+.triangle .layui-form p{
+    position: absolute;
+    left: -35px;
+    width: 75px;
+    border-bottom: 1px #fff solid;
+}
+.triangle .layui-form p:first-child{
+    top:75px;
+}
+.triangle .layui-form p:last-child{
+    top:100px;
+    border: none;
+}
+.phoneConfirm{
+    text-align: right;
+}
+.phoneConfirm button{
+    background:rgba(228, 57, 55, 1);
+    width: 150px;
+}
+.phoneConfirm form{
+    display: inline-block;
+}
+.left-nav #nav li a i{
+    padding-right: 0;
+}
+.left-nav #nav li a {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.left-nav #nav .layui-form{
+    display: none;
+}
+.phoneDefault .permissionType{
+    display: flex;
+}
+.phoneDefault .roomPermission,.phoneDefault .techniciansPermission{
+    width: 150px;
+}
+.layui-form-checkbox{
+    margin:10px 0;
+}
+.phoneDefault .roomPermission .layui-form-checkbox,
+.phoneDefault .techniciansPermission .layui-form-checkbox{
+    border-bottom: 1px #ccc solid;
+}

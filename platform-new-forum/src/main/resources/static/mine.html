@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="stylesheet" href="./dist/css/mui.css"/>
+    <link rel="stylesheet" href="./dist/css/common.css"/>
+    <link rel="stylesheet" href="./dist/css/icons-extra.css"/>
+    <link rel="stylesheet" href="./dist/css/mui.min.css"/>
+    <title></title>
+    <style>
+        #refreshContainer{
+            margin-top:200px;
+        }
+    </style>
+</head>
+
+<body id="mine">
+<div class="header">
+    <div style="float: left;line-height: 4.4rem;padding-left:1.2rem"><i class="mui-icon mui-icon-arrowleft" style="font-size: 3rem;color:#fff"></i></div>
+</div>
+    <div class="user" style="margin-top: 4rem;">
+
+    </div>
+    <div class="postTitle"><i style="font-size: 1.6rem" class="mui-icon-extra mui-icon-extra-xiaoshuo"></i> 全部帖子</div>
+    <div id="refreshContainer" class="allPost mui-content mui-scroll-wrapper">
+        <div class="mui-scroll" style="min-height:100%">
+            <!--数据列表-->
+            <ul class="mui-table-view mui-table-view-chevron" id="articalList"></ul>
+        </div>
+    </div>
+    <script src="lib/script/jquery.min.js"></script>
+    <script src="./dist/js/mui.js"></script>
+    <!--<script src="./dist/js/mui.min.js"></script>-->
+    <script src="./dist/js/common.js"></script>
+    <script>
+        mui(".header").on('tap','.mui-icon-arrowleft',function(){
+            window.history.back();
+            return false;
+        });
+        var id=getUrlParam('id');
+        var html='',pageNum=1,pageSize=10,total;
+        var state=ajax(domain+'/forumTopic/queryUserInfo?uid='+id,'POST','',headers);
+        if(state.code==200){
+            $('.user').html(`
+                 <div>
+                    <span><img src="${state.data.headImg}" alt=""/></span>
+                </div>
+                <div>${state.data.nickName==null?'优卡用户':state.data.nickName} Lv.${state.data.grade}</div>
+            `)
+        }
+        function showList(pageNum,pageSize){
+            if(pageNum==1){
+                html=''
+            }
+            var list=ajax(domain+'/forumTopic/queryUserTopicList?uid='+id+'&pageNum='+pageNum+'&pageSize='+pageSize,'POST','',headers);
+            if(list.code=='200'){
+                total=list.total;
+                $.each(list.data,function(i,obj){
+                    var uid=sessionStorage.getItem('uid');
+                    html+=`
+                    <li data-id="${obj.id}">
+                        <div style="font-size: 1.5rem;margin-bottom:0.5rem">${obj.title}</div>
+                        <div class="grey-text">查看:${obj.viewCount}&nbsp;&nbsp; 回复:${obj.replyCount}
+                         <text class="delete ${id==uid?'':'none'}" data-id="${obj.id}" style="float: right">删除</text>
+                        </div>
+                    </li>
+                `;
+                });
+                $('#articalList').html(html)
+            }
+        }
+        showList(pageNum,pageSize);
+//        upDown(pageNum,pageSize,function(pageNum,pageSize){
+//            showList(pageNum,pageSize);
+//        },function(pageNum,pageSize,that){
+//            console.log(total,pageNum*10);
+//            if(total>pageNum*10){
+//                pageNum++;
+//                showList(pageNum,pageSize);
+//                if(total<=pageNum*10){
+//                    that.endPullupToRefresh(true);
+//                    console.log(total,pageNum*10);
+//                }
+//            }
+//        });
+
+        mui.init({
+            pullRefresh : {
+                container:'#refreshContainer',//待刷新区域标识，querySelector能定位的css选择器均可，比如：id、.class等
+                down : {
+                    style:'circle',
+                    color:'#2bd009',
+                    height:50,//可选,默认50.触发下拉刷新拖动距离,
+                    auto: false,//可选,默认false.首次加载自动下拉刷新一次
+                    contentdown : "下拉可以刷新",//可选，在下拉可刷新状态时，下拉刷新控件上显示的标题内容
+                    contentover : "释放立即刷新",//可选，在释放可刷新状态时，下拉刷新控件上显示的标题内容
+                    contentrefresh : "正在刷新...",//可选，正在刷新状态时，下拉刷新控件上显示的标题内容
+                    callback :function(){ //必选，刷新函数，根据具体业务来编写，比如通过ajax从服务器获取新数据；
+
+                        pageNum=1;pageSize=10;
+                        showList(pageNum,pageSize);
+                        mui('#refreshContainer').pullRefresh().endPulldownToRefresh();
+                        mui('#refreshContainer').pullRefresh().refresh(true);
+
+                    }
+                },
+                up : {
+                    height:50,//可选.默认50.触发上拉加载拖动距离
+                    auto:false,//可选,默认false.自动上拉加载一次
+                    contentrefresh : "正在加载...",//可选，正在加载状态时，上拉加载控件上显示的标题内容
+                    contentnomore:'没有更多帖子了',//可选，请求完毕若没有更多数据时显示的提醒内容；
+                    callback :function(){
+
+                        if(total>pageNum*10){
+                            pageNum++;
+                            showList(pageNum,pageSize);
+                            this.endPullupToRefresh(false);
+
+                        }else{
+                            this.endPullupToRefresh(true);
+
+                        }
+                    } //必选，刷新函数，根据具体业务来编写，比如通过ajax从服务器获取新数据；
+                }
+            }
+        });
+        mui("#articalList").on('tap','ul li',function(){
+
+            window.location.href='detail.html?id='+$(this).attr('data-id')
+        });
+        mui("#articalList").on('tap','.delete',function(){
+            event.stopPropagation();
+            var id=$(this).attr('data-id');
+            var btnArray = ['否', '是'];
+            mui.confirm('确认删除此贴？', '提示', btnArray, function(e) {
+                if (e.index == 1) {
+                    var state=ajax(domain+'/forumTopic/deleteTopic?id='+id,'POST','',headers);
+                    if(state.code==200){
+                        mui.toast('删除成功',{ duration:1500, type:'div' });
+                        showList(pageNum,pageSize);
+                    }
+                } else {
+
+                }
+            })
+
+        });
+
+    </script>
+
+</body>
+</html>

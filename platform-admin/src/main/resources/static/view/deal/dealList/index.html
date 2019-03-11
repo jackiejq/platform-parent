@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+  
+  <head>
+    <meta charset="UTF-8">
+    <title>欢迎页面-X-admin2.0</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="../../../css/font.css">
+    <link rel="stylesheet" href="../../../css/xadmin.css">
+    <link rel="stylesheet" href="../../../css/common.css">
+
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+      <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <style>
+      .x-body>.layui-row>form input{
+        width:108px
+      }
+      .layui-table th,
+     td{
+          text-align: center;
+      }
+    </style>
+  </head>
+  
+  <body>
+    <div class="x-nav">
+      <span class="layui-breadcrumb">
+        <a href="">首页</a>
+        <a href="">交易管理</a>
+        <a>
+          <cite>交易列表</cite></a>
+      </span>
+        <a class="layui-btn layui-btn-sm" style="line-height:1.6em;margin-top:3px;float:right" href="javascript:location.replace(location.href);" title="刷新">
+            <i class="layui-icon" style="line-height:26px;">ဂ</i></a>
+    </div>
+    <div class="x-body">
+      <div class="layui-row">
+        <form class="layui-form layui-col-md12 x-so">
+            创建时间：<input class="layui-input begin" placeholder="开始时间" name="begin" id="start" style="width:130px">——
+            <input class="layui-input end" placeholder="结束时间" name="end" id="end" style="width:130px">
+            姓名：<input class="layui-input" name="userName">
+            类型： <div class="layui-input-inline">
+                    <select name="type" >
+                    <option value="">请选择</option>
+                    <option value="1">代偿</option>
+                    <option value="2">收款</option>
+                    </select>
+                  </div>
+          <button id="search" class="layui-btn"><i class="layui-icon">&#xe615;</i></button>
+        </form>
+      </div>
+      <table class="layui-table" lay-size="sm">
+        <thead>
+          <tr>
+            <th>订单id</th>
+            <th>用户姓名</th>
+            <th>类型</th>
+            <th>状态</th>
+            <th>支付金额</th>
+            <th>到账金额</th>
+            <th>手续费</th>
+            <th>支付卡号</th>
+            <th>收款卡号</th>
+            <th>交易摘要</th>
+            <th>账单金额</th>
+            <th>卡内余额</th>
+            <th>最迟支付日期</th>
+            <th>分期交易执行日期集合</th>
+            <th>添加时间</th>
+            <th>操作</th>
+        </thead>
+          <tbody id="tbody"></tbody>
+      </table>
+      <div id="page"></div>
+
+    </div>
+    <script type="text/javascript" src="../../../js/jquery.min.js"></script>
+    <script type="text/javascript" src="../../../lib/layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="../../../js/xadmin.js"></script>
+    <script src="../../../js/common.js"></script>
+    <script src="../../../js/ajax.js"></script>
+    <script src="../../../js/tool.js"></script>
+    <script>
+      layui.use(['laypage', 'layer','laydate','form'], function() {
+        var laydate = layui.laydate;
+        var layer = layui.layer
+                , form = layui.form;
+          //执行一个laydate实例
+          laydate.render({
+              elem: '#start' //指定元素
+              , type: 'datetime'
+
+          });
+          //执行一个laydate实例
+          laydate.render({
+              elem: '#end' //指定元素
+              , type: 'datetime'
+          });
+
+        var url = domain1 + '/userTrade/findUserTradeList';
+
+        var element = function (item) {
+            return `
+                  <tr>
+                  <td >${item.id}</td>
+                  <td >${item.userName}</td>
+                  <td>${item.type==1?'代偿':'收款'}</td>
+                  <td>${item.status==-3?'取消':item.status==-2?'全部失败':item.status==-1?'部分失败':item.status==0?'订单待确认':item.status==1?'进行中':item.status==2?'成功':''}</td>
+                  <td>${item.paymentAmount}</td>
+                  <td>${item.receiveAmount}</td>
+                  <td>${item.serviceCharge}</td>
+                  <td>${item.paymentCardId}</td>
+                  <td>${item.receiveCardId}</td>
+                  <td>${item.summary}</td>
+                  <td>${item.billAmount}</td>
+                  <td>${item.cardBalance}</td>
+                  <td>${item.cardLastPaymentDate}</td>
+                  <td>${item.paymentDays==null?'':item.paymentDays}</td>
+                   <td>${getDate(item.createTime)}</td>
+                   <td>
+                       <button class="layui-btn layui-btn-primary layui-btn-xs" onclick="x_admin_show('交易详情','detail.html?id=${item.id}',850,520)">查看详情</button>
+                   </td>
+                  </tr>
+            `
+        };
+        servePage(url, element);
+
+        $('#search').click(function(e){
+          e.preventDefault();
+            var startTime=$('.begin').val().replace(/\:/g,"%3A");
+            var endTime=$('.end').val().replace(/\:/g,"%3A");
+          var userName=$('[name=userName]').val();
+          var type=$('[name=type]').val();
+          var url2 = domain1 + '/userTrade/findUserTradeList?type='+type+'&userName='+userName+'&startTime='+startTime+'&endTime='+endTime;
+          servePage2(url2, element);
+        });
+        form.render();
+      })
+    </script>
+  </body>
+
+</html>

@@ -1,0 +1,132 @@
+html{
+    font-size: 12px;
+}
+body{
+    background: #f4f4f4;
+}
+li{
+    list-style: none;
+}
+.mui-content{
+    background-color: #ffffff!important;
+}
+.right{
+    text-align: right;
+}
+.grey-text{
+    font-size: 1rem;
+    color:#999;
+}
+.none{
+    display: none;
+}
+.header{
+    width: 100%;
+    height: 4rem;
+    position: fixed;
+    top: 0;
+    z-index: 99;
+    background: #129aeb;
+}
+.header-right{
+    width: 40%;
+    float: right;
+    line-height: 4.4rem;
+}
+.header-right a{
+    float: right;
+    color: #FFF;
+    line-height: 4rem;
+    font-size: 3rem;
+    margin-right: 1rem;
+}
+li.list-box{
+    overflow: hidden;
+    border-bottom: 1px solid #EFEFEF;
+    background: #FFF;
+    padding:1rem;
+}
+li.list-box .mui-row>div{
+    line-height: 2.5rem;
+}
+.userImg{
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+}
+.userName{
+    padding-left:0.5rem
+}
+li.list-box .right{
+    color:#999;
+    font-size: 1rem;
+}
+.viewLogo{
+    font-size: 1rem!important;
+}
+#detail .mui-content{
+    padding:1rem;
+}
+.detail-title{
+    border-bottom: 1px solid #efefef;
+}
+.userMsg div.middle{
+    padding-left:1rem;
+    font-size: 1.2rem;
+}
+#detail i{
+    color:#999;font-size: 1.2rem
+}
+#detail .response{
+    border-bottom: 1px solid #efefef;
+    padding:1rem 0;
+}
+#detail .reply{
+    border: 1px dashed #efefef;
+    background: #f5f5f5;
+    padding:0.8rem;
+    font-size: 1.2rem;
+    color:#999;
+    border-radius: 5px;
+    margin-bottom:1rem;
+}
+.reply-userImg{
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+}
+.reply-input{
+    width: 100%;
+    height: 2.5rem!important;
+    text-indent: 0.5rem;
+    margin-top: 0px;
+    border: 1px solid #F5F5F5!important;
+    border-radius: 5px!important;
+}
+#mine .user{
+    padding:1.5rem 0 1rem 0;
+    /*background: url('../../image/bg.jpg') no-repeat 0 0;*/
+    background: rgba(49, 49, 49, 0.84);
+    background-size: cover;
+}
+#mine .user img{
+    border-radius: 50%;
+    width:5rem;
+    height:5rem;
+}
+#mine .user>div{
+    text-align: center;
+    color:#fff;
+}
+.postTitle{
+    margin-bottom:1rem;
+    text-align: center;padding:0.5rem;
+    background: #ffffff;
+}
+.allPost li{
+    padding:1rem 1rem 1.2rem 1rem;
+    border-bottom: 1px solid #efefef;
+}
+.allPost li:last-child{
+    border-bottom: none;
+}

@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.slljr.finance.front.mapper.SysConfigMapper">
+    <resultMap id="BaseResultMap" type="com.slljr.finance.common.pojo.model.SysConfig">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="sys_key" jdbcType="VARCHAR" property="sysKey"/>
+        <result column="sys_value" jdbcType="VARCHAR" property="sysValue"/>
+        <result column="summary" jdbcType="VARCHAR" property="summary"/>
+        <result column="type" jdbcType="INTEGER" property="type"/>
+        <result column="status" jdbcType="INTEGER" property="status"/>
+        <result column="opt_uid" jdbcType="INTEGER" property="optUid"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, sys_key, sys_value, summary, type, status, opt_uid, create_time, update_time
+  </sql>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_config
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from sys_config
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+    <insert id="insert" parameterType="com.slljr.finance.common.pojo.model.SysConfig">
+    insert into sys_config (id, sys_key, sys_value, 
+      summary, type, status, 
+      opt_uid, create_time, update_time
+      )
+    values (#{id,jdbcType=INTEGER}, #{sysKey,jdbcType=VARCHAR}, #{sysValue,jdbcType=VARCHAR}, 
+      #{summary,jdbcType=VARCHAR}, #{type,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, 
+      #{optUid,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+
+    <insert id="insertSelective" parameterType="com.slljr.finance.common.pojo.model.SysConfig">
+        insert into sys_config
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="sysKey != null">
+                sys_key,
+            </if>
+            <if test="sysValue != null">
+                sys_value,
+            </if>
+            <if test="summary != null">
+                summary,
+            </if>
+            <if test="type != null">
+                type,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="optUid != null">
+                opt_uid,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="sysKey != null">
+                #{sysKey,jdbcType=VARCHAR},
+            </if>
+            <if test="sysValue != null">
+                #{sysValue,jdbcType=VARCHAR},
+            </if>
+            <if test="summary != null">
+                #{summary,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null">
+                #{type,jdbcType=INTEGER},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=INTEGER},
+            </if>
+            <if test="optUid != null">
+                #{optUid,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.slljr.finance.common.pojo.model.SysConfig">
+        update sys_config
+        <set>
+            <if test="sysKey != null">
+                sys_key = #{sysKey,jdbcType=VARCHAR},
+            </if>
+            <if test="sysValue != null">
+                sys_value = #{sysValue,jdbcType=VARCHAR},
+            </if>
+            <if test="summary != null">
+                summary = #{summary,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null">
+                type = #{type,jdbcType=INTEGER},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=INTEGER},
+            </if>
+            <if test="optUid != null">
+                opt_uid = #{optUid,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.slljr.finance.common.pojo.model.SysConfig">
+        update sys_config
+        set sys_key = #{sysKey,jdbcType=VARCHAR},
+          sys_value = #{sysValue,jdbcType=VARCHAR},
+          summary = #{summary,jdbcType=VARCHAR},
+          type = #{type,jdbcType=INTEGER},
+          status = #{status,jdbcType=INTEGER},
+          opt_uid = #{optUid,jdbcType=INTEGER},
+          create_time = #{createTime,jdbcType=TIMESTAMP},
+          update_time = #{updateTime,jdbcType=TIMESTAMP}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+<!--auto generated by codehelper on 2018-12-13-->
+	<select id="findBySysKey" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_config
+        where sys_key=#{sysKey,jdbcType=VARCHAR}
+        limit 1
+    </select>
+
+
+    <!--根据批量KEY查询-->
+    <select id="findBySysKeys" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_config
+        where sys_key in
+        <foreach collection="list" item="listItem" open="(" separator="," close=")">
+            #{listItem}
+        </foreach>
+    </select>
+</mapper>

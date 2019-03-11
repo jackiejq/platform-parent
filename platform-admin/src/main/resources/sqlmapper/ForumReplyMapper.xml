@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.slljr.finance.admin.mapper.ForumReplyMapper">
+  <resultMap id="BaseResultMap" type="com.slljr.finance.common.pojo.model.ForumReply">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="topic_id" jdbcType="INTEGER" property="topicId" />
+    <result column="reply_uid" jdbcType="INTEGER" property="replyUid" />
+    <result column="parent_reply_uid" jdbcType="INTEGER" property="parentReplyUid" />
+    <result column="content" jdbcType="VARCHAR" property="content" />
+    <result column="like_count" jdbcType="INTEGER" property="likeCount" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <resultMap id="VoResultMap" type="com.slljr.finance.common.pojo.vo.FroumReplyListVO" extends="BaseResultMap">
+	 <result column="headImg"  property="headImg" />
+	 <result column="nickName"  property="nickName" />
+	 <result column="name"  property="name" />
+	 <result column="twoName"  property="twoName" />
+	 <result column="grade"  property="grade" />
+	 <result column="twoContent"  property="twoContent" />
+	 <result column="twoNickname"  property="twoNickname" />
+	 <result column="twoHeadimg" property="twoHeadimg" />
+	 <result column="twoGrade"  property="twoGrade" />
+	 <result column="twoCreatetime" property="twoCreatetime" />	  	 		 
+  	</resultMap>
+  	  <resultMap id="ReplyVoResultMap" type="com.slljr.finance.common.pojo.vo.ReplyDetailsVo" extends="BaseResultMap">
+	 <result column="title"  property="title" />
+	 <result column="nickName"  property="nickName" />	 	 		 
+  	</resultMap>
+  <sql id="Base_Column_List">
+    id, topic_id, reply_uid, parent_reply_uid, content, like_count, status, create_time, 
+    update_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from forum_reply
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectByTopic" parameterType="java.lang.Integer">
+    select 
+    topic_id
+    from forum_reply
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+   <select id="queryReplyCount" resultType ="java.lang.Integer">
+    select count(0) from forum_reply where id =#{id,jdbcType=INTEGER} or parent_reply_uid = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from forum_reply
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.slljr.finance.common.pojo.model.ForumReply">
+    insert into forum_reply (id, topic_id, reply_uid, 
+      parent_reply_uid, content, like_count, 
+      status, create_time, update_time
+      )
+    values (#{id,jdbcType=INTEGER}, #{topicId,jdbcType=INTEGER}, #{replyUid,jdbcType=BIGINT}, 
+      #{parentReplyUid,jdbcType=INTEGER}, #{content,jdbcType=VARCHAR}, #{likeCount,jdbcType=INTEGER}, 
+      #{status,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+   
+  <insert id="insertSelective" parameterType="com.slljr.finance.common.pojo.model.ForumReply">
+    insert into forum_reply
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="topicId != null">
+        topic_id,
+      </if>
+      <if test="replyUid != null">
+        reply_uid,
+      </if>
+      <if test="parentReplyUid != null">
+        parent_reply_uid,
+      </if>
+      <if test="content != null">
+        content,
+      </if>
+      <if test="likeCount != null">
+        like_count,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="topicId != null">
+        #{topicId,jdbcType=INTEGER},
+      </if>
+      <if test="replyUid != null">
+        #{replyUid,jdbcType=BIGINT},
+      </if>
+      <if test="parentReplyUid != null">
+        #{parentReplyUid,jdbcType=INTEGER},
+      </if>
+      <if test="content != null">
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="likeCount != null">
+        #{likeCount,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.slljr.finance.common.pojo.model.ForumReply">
+    update forum_reply
+    <set>
+      <if test="topicId != null">
+        topic_id = #{topicId,jdbcType=INTEGER},
+      </if>
+      <if test="replyUid != null">
+        reply_uid = #{replyUid,jdbcType=BIGINT},
+      </if>
+      <if test="parentReplyUid != null">
+        parent_reply_uid = #{parentReplyUid,jdbcType=INTEGER},
+      </if>
+      <if test="content != null">
+        content = #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="likeCount != null">
+        like_count = #{likeCount,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.slljr.finance.common.pojo.model.ForumReply">
+    update forum_reply
+    set topic_id = #{topicId,jdbcType=INTEGER},
+      reply_uid = #{replyUid,jdbcType=BIGINT},
+      parent_reply_uid = #{parentReplyUid,jdbcType=INTEGER},
+      content = #{content,jdbcType=VARCHAR},
+      like_count = #{likeCount,jdbcType=INTEGER},
+      status = #{status,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="queryReplylist" parameterType="java.lang.Integer"  resultMap="VoResultMap">
+     SELECT    
+	    fr.id, fr.topic_id, fr.reply_uid, fr.parent_reply_uid, fr.content, fr.like_count, fr.status, fr.create_time, 
+	    fr.update_time, 
+	    fu.grade AS grade,
+		uo.nick_name AS nickName,
+		uo.name AS name,
+		uo.head_img AS headImg,
+		f2.content AS twoContent,
+		uos.name AS twoName,
+		uos.nick_name AS twoNickname,
+		uos.head_img AS twoHeadimg,
+		fus.grade AS twoGrade,
+		f2.create_time AS twoCreatetime
+	FROM
+		forum_reply fr
+	LEFT JOIN forum_reply f2 ON fr.parent_reply_uid = f2.id
+	LEFT JOIN forum_user fu ON fr.reply_uid = fu.uid
+	LEFT JOIN forum_user fus ON f2.reply_uid = fus.uid
+	LEFT JOIN user_basic uo ON fr.reply_uid = uo.id
+	LEFT JOIN user_basic uos ON f2.reply_uid = uos.id
+	WHERE
+		fr.`status` = 0
+	<if test="id != null and id != '' ">
+      and fr.topic_id = #{id,jdbcType=INTEGER}
+    </if>
+	 
+	ORDER BY
+		fr.create_time DESC			
+    </select>
+      <select id="queryReplyDetails" parameterType="java.lang.Integer"  resultMap="ReplyVoResultMap">
+    	SELECT    
+    	ft.title AS title,fr.content,uo.nick_name AS nickName,fr.create_time	
+		FROM
+			forum_reply fr
+		LEFT JOIN user_basic uo ON fr.reply_uid = uo.id
+		LEFT JOIN forum_topic ft ON fr.topic_id = ft.id
+		WHERE
+		fr.`status` = 0
+		<if test="id != null and id != '' ">
+	      and ft.id = #{id,jdbcType=INTEGER}
+	    </if>
+		 <if test="parentReplyUid != null and parentReplyUid != '' ">
+	      and fr.id = #{parentReplyUid,jdbcType=INTEGER}
+	    </if>		
+    </select>
+    
+    <update id="updateByStatus" parameterType="java.lang.Integer">
+    update forum_reply
+    set 
+      status = -1     
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
